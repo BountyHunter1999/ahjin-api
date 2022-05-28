@@ -38,7 +38,7 @@ class User(AbstractBaseUser, PermissionsMixin):
     name = models.CharField(max_length=255)
     is_active = models.BooleanField(default=True)
     is_staff = models.BooleanField(default=False)
-    ahjin_point = models.FloatField(default=0)
+    ahjin_coin = models.FloatField(default=0)
 
     objects = UserManager()
 
