@@ -13,7 +13,8 @@ RUN apk add --update --no-cache postgresql-client
 
 # adding temporary packages for requirements.txt
 RUN apk add --update --no-cache --virtual .tmp-build-deps \
-     gcc libc-dev linux-headers postgresql-dev
+     gcc libc-dev linux-headers  rust cargo \
+     postgresql-dev libffi-dev
 
 RUN pip install -r /requirements.txt
 

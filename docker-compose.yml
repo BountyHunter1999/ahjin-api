@@ -17,6 +17,11 @@ services:
       - DB_NAME=app
       - DB_USER=postgres
       - DB_PASS=secretpassword
+      - DJANGO_SECRET_KEY=${DJANGO_SECRET_KEY}
+      - GMAIL_ACC=${GMAIL_ACC}
+      - GMAIL_PW=${GMAIL_PW}
+      - EMAIL_VERIFICATION_OPTION=${EMAIL_VERIFICATION_OPTION:-none}
+      - SENDGRID_API_KEY=${SENDGRID_API_KEY}
     depends_on:
       - db
 

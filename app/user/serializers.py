@@ -1,62 +1,60 @@
-from django.contrib.auth import get_user_model, authenticate
-from django.utils.translation import gettext_lazy as _
-
+from django.db import transaction
 from rest_framework import serializers
+from dj_rest_auth.registration.serializers import RegisterSerializer
+
+from core.models import GENDER_SELECTION, CustomUser
 
 
-class UserSerializer(serializers.ModelSerializer):
-    """Serializer for the users object"""
+class CustomRegisterSerializer(RegisterSerializer):
+    gender = serializers.ChoiceField(choices=GENDER_SELECTION)
+    phone_number = serializers.CharField(max_length=30)
+    ahjin_coin = serializers.FloatField(default=0)
+    user_hash = serializers.CharField(max_length=255, required=False)
 
-    class Meta:
-        model = get_user_model()
-        fields = ['email', 'password', 'name', 'ahjin_coin']
-        extra_kwargs = {'password': {'write_only': True, 'min_length': 8}}
 
-    def create(self, validated_data):
-        """
-        Create a new user with an encrypted password and return it
-        """
-        return get_user_model().objects.create_user(**validated_data)
-
-    def update(self, instance, validated_data):
-        """
-        Update a user, setting the password correctly, and return it
-        """
-        password = validated_data.pop('password', None)
-        user = super().update(instance, validated_data)
-
-        if password:
-            user.set_password(password)
-            user.save()
-
+    # Define transaction.atomic to rollback the save operation in case of error
+    @transaction.atomic
+    def save(self, request):
+        user = super().save(request)
+        user.gender = self.data.get('gender')
+        user.phone_number = self.data.get('phone_number')
+        user.ahjin_coin = self.data.get('ahjin_coin')
+        user.user_hash = self.data.get('user_hash')
+        user.save()
         return user
 
 
-class AuthTokenSerializer(serializers.Serializer):
-    """
-    Serializer for the user authentication object
-    """
-    email = serializers.CharField()
-    password = serializers.CharField(
-        style={'input_type': 'password'},
-        trim_whitespace=False
-    )
+class CustomUserDetailsSerializer(serializers.ModelSerializer):
+    
+    # profile = CustomRegisterSerializer(source='CustomUser')
 
-    def validate(self, attrs):
-        """
-        Validate and authenticate the user
-        """
-        email = attrs.get('email')
-        password = attrs.get('password')
-
-        user = authenticate(
-            request=self.context.get('request'),
-            username=email,
-            password=password
+    class Meta:
+        model = CustomUser
+        fields = (
+            'pk',
+            'email',
+            'phone_number',
+            'gender',
+            'ahjin_coin',
+            'user_hash'
         )
-        if not user:
-            msg = _('Unable to authenticate with provided credentials')
-            raise serializers.ValidationError(msg, code='authentication')
+        read_only_fields = ('pk', 'email', 'phone_number', 'user_hash')
+    
+    # def update(self, instance, validated_data):
+    #     """
+    #     Update a user
+    #     """
 
-        attrs['user'] = user
-        return attrs
+    #     customuser_serializer = self.fields['profile']
+    #     customuser_instance = instance.customuser
+    #     print(f"Instance is: {instance}")
+    #     print(f"Validated data is : {validated_data}")
+    #     customuser_data = validated_data.pop('customuser', {})
+
+    #     phone_number = customuser_data.get('phone_number')
+    #     ahjin_coin = customuser_data.get('ahjin_coin')
+    #     user_hash = customuser_data.get('user_hash')
+
+    #     if phone_number:
+    #         customuser_serializer.update(customuser_instance, )
+
