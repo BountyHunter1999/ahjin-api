@@ -38,7 +38,7 @@ class CustomUserDetailsSerializer(serializers.ModelSerializer):
             'ahjin_coin',
             'user_hash'
         )
-        read_only_fields = ('pk', 'email', 'phone_number', 'user_hash')
+        read_only_fields = ('pk', 'email', 'phone_number', )
     
     # def update(self, instance, validated_data):
     #     """
