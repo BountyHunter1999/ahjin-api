@@ -4,11 +4,13 @@ from dj_rest_auth.views import LoginView, LogoutView, \
                                PasswordResetView, PasswordResetConfirmView, \
                                UserDetailsView
 
+from rest_framework_simplejwt.views import TokenVerifyView
+from dj_rest_auth.jwt_auth import get_refresh_view
 
 urlpatterns = [
-    path('register/', RegisterView.as_view()),
-    path('login/', LoginView.as_view()),
-    path('logout/', LogoutView.as_view()),
+    path('register/', RegisterView.as_view(), name='account_signup'),
+    path('login/', LoginView.as_view(), name='account_login'),
+    path('logout/', LogoutView.as_view(), name='account_logout'),
     path('detail/', UserDetailsView.as_view(), name='rest_user_details'),
 
     path('verify-email/',
@@ -21,4 +23,6 @@ urlpatterns = [
     path('password-reset/', PasswordResetView.as_view()),
     path('password-reset-confirm/<uidb64>/<token>/',
          PasswordResetConfirmView.as_view(), name='password_reset_confirm'), 
+     path('token/verify/', TokenVerifyView.as_view(), name='token_verify'),
+     path('token/refresh/', get_refresh_view().as_view(), name='token_refresh'),
 ]

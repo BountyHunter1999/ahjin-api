@@ -2,11 +2,12 @@ from django.db import transaction
 from rest_framework import serializers
 from dj_rest_auth.registration.serializers import RegisterSerializer
 
-from core.models import GENDER_SELECTION, CustomUser
+from core.models import CustomUser
+# from core.models import GENDER_SELECTION, CustomUser
 
 
 class CustomRegisterSerializer(RegisterSerializer):
-    gender = serializers.ChoiceField(choices=GENDER_SELECTION)
+    # gender = serializers.ChoiceField(choices=GENDER_SELECTION)
     phone_number = serializers.CharField(max_length=30)
     ahjin_coin = serializers.FloatField(default=0)
     user_hash = serializers.CharField(max_length=255, required=False)
@@ -15,8 +16,9 @@ class CustomRegisterSerializer(RegisterSerializer):
     # Define transaction.atomic to rollback the save operation in case of error
     @transaction.atomic
     def save(self, request):
+        print(f"request is: {request.data}")
         user = super().save(request)
-        user.gender = self.data.get('gender')
+        # user.gender = self.data.get('gender')
         user.phone_number = self.data.get('phone_number')
         user.ahjin_coin = self.data.get('ahjin_coin')
         user.user_hash = self.data.get('user_hash')
@@ -34,11 +36,11 @@ class CustomUserDetailsSerializer(serializers.ModelSerializer):
             'pk',
             'email',
             'phone_number',
-            'gender',
+            # 'gender',
             'ahjin_coin',
             'user_hash'
         )
-        read_only_fields = ('pk', 'email', 'phone_number', )
+        read_only_fields = ('pk', 'email', )
     
     # def update(self, instance, validated_data):
     #     """

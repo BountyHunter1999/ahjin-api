@@ -11,7 +11,8 @@ class UserAdmin(BaseUserAdmin):
     list_display = ['email', 'ahjin_coin']
     fieldsets = (
         (None, {'fields': ('email', 'password')}),
-        (_('Personal Info'), {'fields': ('ahjin_coin', 'gender', 'user_hash')}),
+        # (_('Personal Info'), {'fields': ('ahjin_coin', 'gender', 'user_hash')}),
+        (_('Personal Info'), {'fields': ('ahjin_coin', 'user_hash')}),
         (
             _('Permissions'),
             {'fields': ('is_active', 'is_staff', 'is_superuser')}

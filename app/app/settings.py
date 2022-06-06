@@ -60,6 +60,7 @@ INSTALLED_APPS = [
 
     'core',
     'user',
+    'products',
 ]
 
 MIDDLEWARE = [
@@ -199,3 +200,5 @@ EMAIL_HOST_USER = 'apikey' # this is exactly the value 'apikey'
 EMAIL_HOST_PASSWORD = SENDGRID_API_KEY
 EMAIL_PORT = 587
 EMAIL_USE_TLS = True
+
+CORS_ORIGIN_ALLOW_ALL = True
