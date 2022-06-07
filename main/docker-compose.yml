@@ -1,0 +1,32 @@
+version: "3.3"
+
+services:
+  app:
+    container_name: flaskapp
+    build:
+      context: .
+    ports:
+      - "8001:5000"
+    volumes:
+      - .:/app
+    command: >
+      sh -c "python main.py"
+    environment:
+      - DB_HOST=db
+      - DB_NAME=fapp
+      - DB_USER=fuser
+      - DB_PASS=pass
+      - DATABASE_URL=postgresql://postgres:postgres@db:5432/postgres
+    depends_on:
+      - db
+
+  db:
+    container_name: db
+    image: postgres:14.3-alpine
+    restart: always
+    ports:
+      - "5434:5432"
+    environment:
+      - POSTGRES_DB=postgres
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
