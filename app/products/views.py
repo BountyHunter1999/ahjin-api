@@ -7,7 +7,7 @@ from .models import Product, Review
 from .serializers import ProductSerializer
 
 
-class ProductViewSet(viewsets.ModelViewSet):
+class ProductViewSet(viewsets.ViewSet):
 
     def list(self, request): # GET /api/products
         products = Product.objects.all()

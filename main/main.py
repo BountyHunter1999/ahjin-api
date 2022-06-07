@@ -3,11 +3,12 @@ from flask_sqlalchemy import SQLAlchemy
 
 from flask_cors import CORS # frontend will need this
 
-# from config import DATABASE_CONNECTION_URI
+from config import DATABASE_CONNECTION_URI
 import os
 
 app = Flask(__name__)
-app.config['SQLALCHEMY_DATABASE_URI'] = os.environ.get('DATABASE_URL')
+# app.config['SQLALCHEMY_DATABASE_URI'] = os.environ.get('DATABASE_URL')
+app.config['SQLALCHEMY_DATABASE_URI'] = DATABASE_CONNECTION_URI
 CORS(app)
 
 db = SQLAlchemy(app)

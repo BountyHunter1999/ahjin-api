@@ -16,7 +16,6 @@ services:
       - DB_NAME=fapp
       - DB_USER=fuser
       - DB_PASS=pass
-      - DATABASE_URL=postgresql://postgres:postgres@db:5432/postgres
     depends_on:
       - db
 
@@ -27,6 +26,6 @@ services:
     ports:
       - "5434:5432"
     environment:
-      - POSTGRES_DB=postgres
-      - POSTGRES_USER=postgres
-      - POSTGRES_PASSWORD=postgres
+      - POSTGRES_DB=fapp
+      - POSTGRES_USER=fuser
+      - POSTGRES_PASSWORD=pass
