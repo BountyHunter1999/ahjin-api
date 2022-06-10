@@ -1,5 +1,5 @@
 # Pull base image
-FROM python:3.11-rc-alpine
+FROM python:3.9.13-alpine3.16
 
 # Environment Variables
 ENV PYTHONUNBUFFERED 1

@@ -5,10 +5,10 @@ from django.conf import settings
 
 
 class Product(models.Model):
-    name = models.CharField(max_length=255, blank=False)
+    name = models.CharField(max_length=255, blank=False, unique=True)
     price_m = models.FloatField(default=0)
     price_a = models.FloatField(default=0)
-    unique_feature = models.JSONField(default={}) 
+    unique_feature = models.JSONField(default=dict) 
     created_at = models.DateTimeField(auto_now_add=True)
     # image = models.ImageField(null=True,blank=True, default='/placeholder.png')
     # imageII = models.ImageField(null=True,blank=True, default='/placeholder.png')

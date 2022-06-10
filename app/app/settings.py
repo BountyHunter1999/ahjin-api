@@ -47,7 +47,7 @@ INSTALLED_APPS = [
     'django.contrib.sites',
 
     'rest_framework',
-    'rest_framework.authtoken',
+    # 'rest_framework.authtoken',
 
 
     'allauth',
@@ -177,14 +177,29 @@ AUTHENTICATION_BACKENDS = [
     # Needed to login by username in Django admin, regardless of allauth
     'django.contrib.auth.backends.ModelBackend',
 ]
+REST_AUTH_TOKEN_MODEL = None # we using stateless JWT no need for a model
 
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': [
         'dj_rest_auth.jwt_auth.JWTCookieAuthentication',
     ],
+    'DEFAULT_PERMISSION_CLASSES': (
+        'rest_framework.permissions.AllowAny',
+    )
 }
+# PERMISSIONS
+# IsAuthenticated
+# IsAuthenticatedOrReadOnly
+# AllowAny
 
 REST_USE_JWT = True
+
+from datetime import timedelta
+
+SIMPLE_JWT = {
+    'ACCESS_TOKEN_LIFETIME': timedelta(days=30),
+    'REFRESH_TOKEN_LIFETIME': timedelta(days=7),
+}
 
 # For every authenticated session, dj-rest-auth would return a Set-Cookie header
 # Set-Cookie: my-app-auth=xxxxxxxxxxxxx; expires=Sun, 17 Feb 2021 14:21:00 GMT; HttpOnly; Max-Age=300; Path=/

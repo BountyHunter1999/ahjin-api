@@ -12,7 +12,7 @@ class UserAdmin(BaseUserAdmin):
     fieldsets = (
         (None, {'fields': ('email', 'password')}),
         # (_('Personal Info'), {'fields': ('ahjin_coin', 'gender', 'user_hash')}),
-        (_('Personal Info'), {'fields': ('ahjin_coin', 'user_hash')}),
+        (_('Personal Info'), {'fields': ('ahjin_coin', 'user_hash', 'phone_number')}),
         (
             _('Permissions'),
             {'fields': ('is_active', 'is_staff', 'is_superuser')}
@@ -28,3 +28,4 @@ class UserAdmin(BaseUserAdmin):
 
 
 admin.site.register(models.CustomUser, UserAdmin)
+# admin.site.register(models.User, UserAdmin)
