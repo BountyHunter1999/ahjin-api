@@ -1,6 +1,7 @@
 from django.db import transaction
 from rest_framework import serializers
 from dj_rest_auth.registration.serializers import RegisterSerializer
+from dj_rest_auth.serializers import  LoginSerializer
 
 from core.models import CustomUser
 # from core.models import GENDER_SELECTION, CustomUser
@@ -28,7 +29,7 @@ class CustomRegisterSerializer(RegisterSerializer):
 
 from django.conf import settings
 
-class CustomUserDetailsSerializer(serializers.ModelSerializer):
+class CustomUserDetailsSerializer(RegisterSerializer):
     """
     User model w/o password
     """
@@ -63,3 +64,30 @@ class CustomUserDetailsSerializer(serializers.ModelSerializer):
         model = UserModel
         fields = ('pk', *extra_fields)
         read_only_fields = ('email',)
+
+
+from rest_framework.exceptions import ValidationError
+
+class CustomLoginSerializer(LoginSerializer):
+
+    def validate(self, attrs):
+        username = attrs.get('username')
+        email = attrs.get('email')
+        password = attrs.get('password')
+        user = self.get_auth_user(username, email, password)
+
+        if not user:
+            msg = _('Unable to log in with provided credentials.')
+            raise ValidationError(msg)
+
+        # Did we get back an active user?
+        self.validate_auth_user_status(user)
+
+        # If required, is the email verified?
+        if not user.is_superuser:
+            print("Checking is it admin")
+            if 'dj_rest_auth.registration' in settings.INSTALLED_APPS:
+                self.validate_email_verification_status(user)
+
+        attrs['user'] = user
+        return attrs

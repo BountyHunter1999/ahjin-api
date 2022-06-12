@@ -33,8 +33,9 @@ from rest_framework.permissions import IsAuthenticated
 # from dj_rest_auth.serializers import (
 #     UserDetailsSerializer, 
 # )
-from .serializers import CustomUserDetailsSerializer
+from .serializers import CustomUserDetailsSerializer, CustomLoginSerializer
 from django.contrib.auth import get_user_model
+from dj_rest_auth.views import LoginView
 
 class CustomUserDetailsView(RetrieveUpdateAPIView):
     """
@@ -64,3 +65,8 @@ class CustomUserDetailsView(RetrieveUpdateAPIView):
         """
         print("This is also called")
         return get_user_model().objects.none()
+
+
+class CustomLoginView(LoginView):
+
+    serializer_class = CustomLoginSerializer
