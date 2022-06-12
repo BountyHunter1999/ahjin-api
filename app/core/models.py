@@ -18,9 +18,10 @@ class CustomUser(AbstractUser):
     phone_number = models.CharField(max_length=30)
     ahjin_coin = models.FloatField(default=0)
     user_hash = models.CharField(max_length=255, blank=True, null=True)
+    is_admin = models.BooleanField(default=False)
 
     # print("Created user")
-    USERNAME_FIELD = 'email'
+    # USERNAME_FIELD = 'email'
 
     
 

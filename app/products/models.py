@@ -24,7 +24,17 @@ class Product(models.Model):
         return f"{self.name} for Rs.{self.price_m} or AC.{self.price_a}"
 
     def __len__(self):
-        return len(self.unique_feature)
+        count = 0
+        try:
+            feature = self.unique_feature[0]
+            if len(feature) > 0:
+                print(f"feature {feature.values()}")
+                for i in feature.values():
+                    print(f"i is {i}")
+                    count += i['count']
+                return count
+        except:
+            return 0
 
 
 class Review(models.Model):

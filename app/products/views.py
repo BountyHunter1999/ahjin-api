@@ -31,8 +31,9 @@ class ProductViewSet(viewsets.ModelViewSet):
     def retrieve(self, request, pk=None): # /api/products/<str:id>
 
         # superusers = User.objects
-        print(User().objects.filter(is_superuser=True)[0].ahjin_coin)
+        # print(User().objects.filter(is_superuser=True)[0].ahjin_coin)
         # print(superusers)
+        # print(request)
         try:
             product = Product.objects.get(pk=pk)
             self.check_object_permissions(request, product)

@@ -7,11 +7,15 @@ from dj_rest_auth.views import LoginView, LogoutView, \
 from rest_framework_simplejwt.views import TokenVerifyView
 from dj_rest_auth.jwt_auth import get_refresh_view
 
+from .views import CustomUserDetailsView
+
+
 urlpatterns = [
     path('register/', RegisterView.as_view(), name='account_signup'),
     path('login/', LoginView.as_view(), name='account_login'),
     path('logout/', LogoutView.as_view(), name='account_logout'),
-    path('detail/', UserDetailsView.as_view(), name='rest_user_details'),
+#     path('detail/', UserDetailsView.as_view(), name='rest_user_details'),
+    path('detail/', CustomUserDetailsView.as_view(), name='rest_user_details'),
 
     path('verify-email/',
          VerifyEmailView.as_view(), name='rest_verify_email'),
