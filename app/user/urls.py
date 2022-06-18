@@ -7,12 +7,13 @@ from dj_rest_auth.views import LoginView, LogoutView, \
 from rest_framework_simplejwt.views import TokenVerifyView
 from dj_rest_auth.jwt_auth import get_refresh_view
 
-from .views import CustomUserDetailsView, CustomLoginView
+from .views import CustomUserDetailsView, CustomLoginView, CustomRegisterView
 
 
 
 urlpatterns = [
-    path('register/', RegisterView.as_view(), name='account_signup'),
+    path('register/', CustomRegisterView.as_view(), name='account_signup'),
+#     path('register/', RegisterView.as_view(), name='account_signup'),
 #     path('login/', LoginView.as_view(), name='account_login'),
     path('login/', CustomLoginView.as_view(), name='account_login'),
     path('logout/', LogoutView.as_view(), name='account_logout'),

@@ -1,35 +1,40 @@
 from django.db import transaction
 from rest_framework import serializers
 from dj_rest_auth.registration.serializers import RegisterSerializer
-from dj_rest_auth.serializers import  LoginSerializer
+from dj_rest_auth.serializers import  LoginSerializer, UserDetailsSerializer
+from django.utils.translation import gettext_lazy as _
 
 from core.models import CustomUser
 # from core.models import GENDER_SELECTION, CustomUser
 from django.contrib.auth import get_user_model
-UserModel = get_user_model()
 
 class CustomRegisterSerializer(RegisterSerializer):
     # gender = serializers.ChoiceField(choices=GENDER_SELECTION)
     phone_number = serializers.CharField(max_length=30)
     ahjin_coin = serializers.FloatField(default=0)
     user_hash = serializers.CharField(max_length=255, required=False)
-
+    is_admin = serializers.BooleanField(default=False)
 
     # Define transaction.atomic to rollback the save operation in case of error
     @transaction.atomic
     def save(self, request):
-        print(f"request is: {request.data}")
+        print("IN CUSTOM REGISTER")
+        # print(f"request is: {request.data}")
         user = super().save(request)
         # user.gender = self.data.get('gender')
         user.phone_number = self.data.get('phone_number')
         user.ahjin_coin = self.data.get('ahjin_coin')
         user.user_hash = self.data.get('user_hash')
+        # print("request on saving new user", request)
+        # print(self.data.get('is_superuser'))
+        user.is_admin = self.data.get('is_admin')
         user.save()
+        # print("USER NOW, ", user)
         return user
 
 from django.conf import settings
 
-class CustomUserDetailsSerializer(RegisterSerializer):
+class CustomUserDetailsSerializer(UserDetailsSerializer):
     """
     User model w/o password
     """
@@ -46,29 +51,44 @@ class CustomUserDetailsSerializer(RegisterSerializer):
     #     return username
 
     class Meta:
-        extra_fields = []
+        model = CustomUser
         # see https://github.com/iMerica/dj-rest-auth/issues/181
-        # UserModel.XYZ causing attribute error while importing other
+        # CustomUser.XYZ causing attribute error while importing other
         # classes from `serializers.py`. So, we need to check whether the auth model has
         # the attribute or not
-        if hasattr(UserModel, 'USERNAME_FIELD'):
-            extra_fields.append(UserModel.USERNAME_FIELD)
-        if hasattr(UserModel, 'EMAIL_FIELD'):
-            extra_fields.append(UserModel.EMAIL_FIELD)
-        if hasattr(UserModel, 'ahjin_coin'):
-            extra_fields.append('ahjin_coin')
-        if hasattr(UserModel, 'user_hash'):
-            extra_fields.append('user_hash')
-        if hasattr(UserModel, 'is_admin'):
-            extra_fields.append('is_admin')
-        model = UserModel
-        fields = ('pk', *extra_fields)
-        read_only_fields = ('email',)
+
+
+        # # model = CustomUser
+        fields = (
+            'pk', 'email', 'phone_number', 
+            'ahjin_coin', 'is_admin', 'user_hash',
+        )
+        # extra_kwargs = {
+        #     'first_name': {'required': True},
+        #     'last_name': {'required': True}
+        # }
+        # read_only_fields = ('pk', 'email',)
 
 
 from rest_framework.exceptions import ValidationError
 
 class CustomLoginSerializer(LoginSerializer):
+    # class Meta:
+    #     model = CustomUser
+    #     fields = (
+    #         '_id',
+    #         'email',
+    #         'phone_number',
+    #         'gender',
+    #         'ahjin_coin',
+    #         'user_hash',
+    #         'is_admin'
+    #     )
+        # read_only_fields = ('pk', 'email', 'phone_number', )
+    # username = serializers.CharField(required=False, allow_blank=True)
+    # email = serializers.EmailField(required=True, allow_blank=False)
+    # password = serializers.CharField(style={'input_type': 'password'})
+
 
     def validate(self, attrs):
         username = attrs.get('username')

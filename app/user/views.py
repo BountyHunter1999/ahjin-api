@@ -6,36 +6,39 @@ from django.contrib.auth.models import BaseUserManager, AbstractBaseUser
 from rest_framework.generics import RetrieveUpdateAPIView
 
 
-class UserManager(BaseUserManager):
+# class UserManager(BaseUserManager):
 
-    def create_superuser(self, email, password):
-        """
-        Creates and saves a new superuser
-        """
-        user = RegisterView.create(email, password)
+#     def create_superuser(self, email, password):
+#         """
+#         Creates and saves a new superuser
+#         """
+#         user = RegisterView.create(email, password)
 
 
-class AdminView(RegisterView):
+# class AdminView(RegisterView):
 
-    def create_admin(self, request, *args, **kwargs):
-        print(request)
-        serializer = self.get_serializer(data=request.data)
-        serializer.is_valid(raise_exception=True)
-        print(serializer)
-        user = self.create_user(email, password)
-        user.is_staff = True
-        user.is_superuser = True
-        user.save(using=self._db)
+#     def create_admin(self, request, *args, **kwargs):
+#         print(request)
+#         serializer = self.get_serializer(data=request.data)
+#         serializer.is_valid(raise_exception=True)
+#         print(serializer)
+#         user = self.create_user(email, password)
+#         user.is_staff = True
+#         user.is_superuser = True
+#         user.save(using=self._db)
 
-        return 
+#         return 
 
 from rest_framework.permissions import IsAuthenticated
 # from dj_rest_auth.serializers import (
 #     UserDetailsSerializer, 
 # )
-from .serializers import CustomUserDetailsSerializer, CustomLoginSerializer
+from .serializers import CustomRegisterSerializer, CustomUserDetailsSerializer, CustomLoginSerializer
 from django.contrib.auth import get_user_model
 from dj_rest_auth.views import LoginView
+
+from rest_framework.response import Response
+
 
 class CustomUserDetailsView(RetrieveUpdateAPIView):
     """
@@ -54,8 +57,9 @@ class CustomUserDetailsView(RetrieveUpdateAPIView):
         # self.request.user.is_admin = self.request.user.is_superuser
         response = self.request.user
         response.is_admin =  self.request.user.is_superuser
+
         # self.user.refresh_from_db()
-        print(response)
+        # print("RESPONSE IS",response, type(response))
         return response
 
     def get_queryset(self):
@@ -70,3 +74,8 @@ class CustomUserDetailsView(RetrieveUpdateAPIView):
 class CustomLoginView(LoginView):
 
     serializer_class = CustomLoginSerializer
+
+
+class CustomRegisterView(RegisterView):
+
+    serializer_class = CustomRegisterSerializer
