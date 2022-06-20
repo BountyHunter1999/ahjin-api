@@ -43,6 +43,7 @@ class Product(models.Model):
     def __len__(self):
         count = 0
         try:
+            print(f" unique feature is: {self.unique_feature}")
             feature = self.unique_feature[0]
             if len(feature) > 0:
                 print(f"feature {feature.values()}")

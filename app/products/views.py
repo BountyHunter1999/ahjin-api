@@ -64,6 +64,7 @@ class ProductViewSet(viewsets.ModelViewSet):
             return Response({}, status=status.HTTP_404_NOT_FOUND)
         serializer = ProductSerializer(instance=product, data=request.data)
         serializer.is_valid(raise_exception=True)
+        print("valid")
         serializer.save()
         return Response(serializer.data, status=status.HTTP_202_ACCEPTED)
 
@@ -79,7 +80,7 @@ class ProductViewSet(viewsets.ModelViewSet):
     def get_permissions(self):
         if self.action in USER_REQUEST:
             permission_classes = [
-                IsAuthenticated,
+                # IsAuthenticated,
             ]
         # elif self.action in ADMIN_REQUEST:
         #     permission_classes = [
