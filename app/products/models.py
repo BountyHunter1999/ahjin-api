@@ -29,6 +29,11 @@ class Product(models.Model):
     unique_feature = models.JSONField(default=dict) 
     created_at = models.DateTimeField(auto_now_add=True)
     updated = models.DateTimeField(auto_now=True)
+    
+    rating = models.DecimalField(
+        max_digits=7,decimal_places=2, null=True, blank=True)
+    numReviews = models.IntegerField(null=True, blank=True, default=0)
+    
     image = models.URLField(max_length=200, default="None")
     image2 = models.URLField(max_length=200, default="None")
     image3 = models.URLField(max_length=200, default="None")
@@ -76,8 +81,8 @@ class Product(models.Model):
 
 
 class Review(models.Model):
-    product = models.ForeignKey(Product, related_name='reviews', on_delete=models.SET_NULL,null=True)
-    user = models.ForeignKey(settings.AUTH_USER_MODEL, related_name='reviews', on_delete=models.SET_NULL, null=True)
+    product = models.ForeignKey(Product, on_delete=models.SET_NULL,null=True)
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.SET_NULL, null=True)
     # user = models.ForeignKey(User, related_name='reviews', on_delete=models.SET_NULL, null=True)
     # name = models.CharField(max_length=200, null=True, blank=True)
     rating = models.IntegerField(null=True, blank=True, default=0)

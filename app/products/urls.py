@@ -1,6 +1,6 @@
 from django.urls import path
 
-from .views import ProductViewSet
+from .views import ProductViewSet, ReviewViewSet
 
 app_name = 'products'
 
@@ -14,6 +14,12 @@ urlpatterns = [
         # 'put': 'update',
         'patch': 'partial_update',
         'delete': 'destroy'
+    })),
+    path('<str:pk>/reviews/', ReviewViewSet.as_view({
+        'post': 'create',
+        'get': 'list',
+        'patch': 'partial_update',
+        'delete': 'destroy',
     })),
 ]
 

@@ -6,7 +6,7 @@ from .models import Product, Review
 from django.contrib.auth import get_user_model as User
 from django.shortcuts import get_object_or_404
 
-from .serializers import ProductSerializer
+from .serializers import ProductSerializer, ReviewSerializer
 
 from rest_framework.permissions import IsAuthenticated, IsAdminUser
 
@@ -15,6 +15,8 @@ USER_REQUEST = ['list', 'retrieve']
 ADMIN_REQUEST = ['create', 'update', 'partial_update', 'destroy']
 
 class ProductViewSet(viewsets.ModelViewSet):
+    serializer_class = ProductSerializer
+    queryset = Product.objects.all()
 
     def list(self, request): # GET /api/products
         products = Product.objects.all()
@@ -77,6 +79,7 @@ class ProductViewSet(viewsets.ModelViewSet):
         product.delete()
         return Response({"msg": "Product Removed"}, status=status.HTTP_204_NO_CONTENT)
 
+
     def get_permissions(self):
         if self.action in USER_REQUEST:
             permission_classes = [
@@ -92,4 +95,103 @@ class ProductViewSet(viewsets.ModelViewSet):
         return [permission() for permission in permission_classes]
 
 
-# class ReviewViewSet
+class ReviewViewSet(viewsets.ModelViewSet):
+    serializer_class = ReviewSerializer
+    queryset = Review.objects.all()
+
+    def list(self, request, pk): # GET /api/products/reviews/<str:prod_id>
+        print("I WAS HERE!!")
+
+        user = request.user
+        product = Product.objects.get(pk=pk)
+        data= request.data
+        print("data",product.review_set.filter(user=user))
+        print(product.review_set.filter(user=user).exists())
+        
+        
+        reviews = Review.objects.all().get(pk=pk)
+        print("reviews is", reviews, type(reviews))
+        serializer = ReviewSerializer(reviews)
+        print(f"Serializer data is:", serializer.data)
+        return Response(serializer.data)
+
+
+    def create(self, request, pk): # POST /api/reviews
+        # print(f"request in review: {request.data}")
+        # print(f"request user in review: {request.user.id}")
+        # reviews = Review.objects.all()
+
+        user = request.user
+        product = Product.objects.get(id=pk)
+        data = request.data
+
+        # Review already exists, don't allow them to spam reviews
+        alreadyExists = product.review_set.filter(user=user).exists()
+
+        if alreadyExists:
+            content = {"detail": "Product already reviewed"}
+            return Response(content, status=status.HTTP_400_BAD_REQUEST)
+        
+        # No Rating or 0 Rating
+        elif data['rating'] == 0:
+            content = {"detail": "Please select a rating"}
+            return Response(content, status.HTTP_400_BAD_REQUEST)
+        
+        # Create Review
+        else:
+            print(user)
+            review = Review.objects.create(
+                user = user,
+                product = product,
+                # name = user.username if user.username ,
+                rating = data['rating'],
+                comment = data['comment']
+            )
+            reviews = product.review_set.all()
+            product.numReviews = len(reviews)
+
+            total = 0
+
+            for i in reviews:
+                total += i.rating
+            
+            product.rating = total / len(reviews)
+            product.save()
+
+            return Response("Review Added", status.HTTP_201_CREATED)
+
+        # data = request.data
+        # data['user'] = request.user.id
+        # data['product'] = pk
+        # serializer = ReviewSerializer(data=data)
+        # serializer.is_valid(raise_exception=True)
+        # serializer.save()
+        # return Response(serializer.data, status=status.HTTP_201_CREATED)
+
+    def partial_update(self, request, pk):
+        print(request.user)
+        print(request.data)
+        pass
+
+    def destroy(self, request, pk=None): # /api/products/<str:id>
+        try:
+            review = Review.objects.get(pk=pk)
+            self.check_object_permissions(request, review)
+        except Product.DoesNotExist:
+            return Response(status=status.HTTP_404_NOT_FOUND)
+        review.delete()
+        return Response({"msg": "Review Removed"}, status=status.HTTP_204_NO_CONTENT)
+    
+    def get_permissions(self):
+        if self.action in USER_REQUEST:
+            permission_classes = [
+                # IsAuthenticated,
+            ]
+        # elif self.action in ADMIN_REQUEST:
+        #     permission_classes = [
+        #         IsAdminUser,
+        #     ]
+        else:
+            permission_classes = [IsAdminUser,]
+
+        return [permission() for permission in permission_classes]
