@@ -1,3 +1,4 @@
+import re
 from rest_framework import serializers
 from .models import Product, Review
 
@@ -6,6 +7,8 @@ class ProductSerializer(serializers.ModelSerializer):
         model = Product
         fields = '__all__'
         read_only_fields = ['id',]
+
+    
 
     # def create(self, validated_data):
     #     """
@@ -29,3 +32,13 @@ class ProductSerializer(serializers.ModelSerializer):
     #     instance.discount = validated_data.get('discount', instance.discount)
     #     instance.save()
     #     return instance
+
+class ReviewSerializer(serializers.ModelSerializer):
+    # reviews = serializers.SerializerMethodField(read_only=True)
+    
+    class Meta:
+        model = Review
+        fields = '__all__'
+        # read_only_fields = ['id', '']
+
+    

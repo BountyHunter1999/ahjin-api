@@ -90,3 +90,6 @@ class ProductViewSet(viewsets.ModelViewSet):
             permission_classes = [IsAdminUser,]
 
         return [permission() for permission in permission_classes]
+
+
+# class ReviewViewSet
