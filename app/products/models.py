@@ -22,6 +22,8 @@ DCAT = (
     ("W","Washing Machine"),
 )
 
+DEFAULT_IMG = "https://www.canva.com/design/DAFBndmWLJ4/Wv-N9IjANw4Q8iRiHUyuBw/view?utm_content=DAFBndmWLJ4&utm_campaign=designshare&utm_medium=link&utm_source=publishsharelink"
+
 class Product(models.Model):
     name = models.CharField(max_length=255, blank=False, unique=True)
     price_m = models.FloatField(default=0, validators=[MinValueValidator(0.0)], help_text='in NPR',)
@@ -34,9 +36,9 @@ class Product(models.Model):
         max_digits=7,decimal_places=2, null=True, blank=True)
     numReviews = models.IntegerField(null=True, blank=True, default=0)
     
-    image = models.URLField(max_length=200, default="None")
-    image2 = models.URLField(max_length=200, default="None")
-    image3 = models.URLField(max_length=200, default="None")
+    image = models.URLField(max_length=200, default=DEFAULT_IMG)
+    image2 = models.URLField(max_length=200, default=DEFAULT_IMG)
+    image3 = models.URLField(max_length=200, default=DEFAULT_IMG)
     # image = models.ImageField(null=True,blank=True, default='/placeholder.png')
     # imageII = models.ImageField(null=True,blank=True, default='/placeholder.png')
     # imageIII = models.ImageField(null=True,blank=True, default='/placeholder.png')
@@ -57,10 +59,12 @@ class Product(models.Model):
         count = 0
         try:
             print(f" unique feature is: {self.unique_feature}")
-            feature = self.unique_feature[0]
+            # feature = self.unique_feature[0]
+            feature = self.unique_feature
             if len(feature) > 0:
-                print(f"feature {feature.values()}")
-                for i in feature.values():
+                print(f"feature {feature}")
+                # for i in feature.values():
+                for i in feature:
                     print(f"i is {i}")
                     count += i['count']
                 return count
