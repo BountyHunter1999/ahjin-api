@@ -56,6 +56,7 @@ class CustomUserDetailsView(RetrieveUpdateAPIView):
         # print(f"User is {self.request.user.is_superuser}")
         # self.request.user.is_admin = self.request.user.is_superuser
         response = self.request.user
+        print("I am groot")
         response.is_admin =  self.request.user.is_superuser
 
         # self.user.refresh_from_db()

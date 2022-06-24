@@ -26,7 +26,6 @@ class CustomRegisterSerializer(RegisterSerializer):
         user.ahjin_coin = self.data.get('ahjin_coin')
         user.user_hash = self.data.get('user_hash')
         # print("request on saving new user", request)
-        # print(self.data.get('is_superuser'))
         user.is_admin = self.data.get('is_admin')
         user.save()
         # print("USER NOW, ", user)
@@ -71,24 +70,12 @@ class CustomUserDetailsSerializer(UserDetailsSerializer):
 
 
 from rest_framework.exceptions import ValidationError
+from django.contrib.auth import authenticate
 
 class CustomLoginSerializer(LoginSerializer):
-    # class Meta:
-    #     model = CustomUser
-    #     fields = (
-    #         '_id',
-    #         'email',
-    #         'phone_number',
-    #         'gender',
-    #         'ahjin_coin',
-    #         'user_hash',
-    #         'is_admin'
-    #     )
-        # read_only_fields = ('pk', 'email', 'phone_number', )
-    # username = serializers.CharField(required=False, allow_blank=True)
-    # email = serializers.EmailField(required=True, allow_blank=False)
-    # password = serializers.CharField(style={'input_type': 'password'})
 
+    def authenticate(self, **kwargs):
+        return authenticate(self.context['request'], **kwargs)
 
     def validate(self, attrs):
         username = attrs.get('username')

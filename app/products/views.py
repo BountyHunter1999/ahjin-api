@@ -100,19 +100,19 @@ class ReviewViewSet(viewsets.ModelViewSet):
     queryset = Review.objects.all()
 
     def list(self, request, pk): # GET /api/products/reviews/<str:prod_id>
-        print("I WAS HERE!!")
-
-        user = request.user
         product = Product.objects.get(pk=pk)
-        data= request.data
-        print("data",product.review_set.filter(user=user))
-        print(product.review_set.filter(user=user).exists())
-        
-        
-        reviews = Review.objects.all().get(pk=pk)
-        print("reviews is", reviews, type(reviews))
-        serializer = ReviewSerializer(reviews)
-        print(f"Serializer data is:", serializer.data)
+        reviews = product.review_set.all()
+        data = list()
+        for i in range(len(reviews)):
+            review = reviews[i]
+            # print(i, type(review))
+            data.append({
+                "rating": review.rating,
+                "comment": review.comment,
+                "product": review.product,
+                "user": review.user,
+            })
+        serializer = ReviewSerializer(data, many=True)
         return Response(serializer.data)
 
 
@@ -124,7 +124,7 @@ class ReviewViewSet(viewsets.ModelViewSet):
         user = request.user
         product = Product.objects.get(id=pk)
         data = request.data
-
+        # print("I WAS HERE HAI CREATE")
         # Review already exists, don't allow them to spam reviews
         alreadyExists = product.review_set.filter(user=user).exists()
 
@@ -158,7 +158,7 @@ class ReviewViewSet(viewsets.ModelViewSet):
             product.rating = total / len(reviews)
             product.save()
 
-            return Response("Review Added", status.HTTP_201_CREATED)
+            return Response({"msg":"Review Added"}, status.HTTP_201_CREATED)
 
         # data = request.data
         # data['user'] = request.user.id
@@ -169,29 +169,66 @@ class ReviewViewSet(viewsets.ModelViewSet):
         # return Response(serializer.data, status=status.HTTP_201_CREATED)
 
     def partial_update(self, request, pk):
-        print(request.user)
-        print(request.data)
-        pass
+        product = Product.objects.get(pk=pk)
+        reviews = product.review_set.all()
+        data = dict()
+        for i in range(len(reviews)):
+            review = None
+            reviewer_id = reviews[i].user.id
+            requester_id = request.user.id
+            if reviewer_id == requester_id:
+                review = reviews[i] 
+            
+        if review:
+            # data['rating'] = request.data.get("rating", review.rating)
+            # data['comment'] = request.data.get("comment", review.comment)
+            # data['product'] = review.product
+            # data['user'] = review.user
 
-    def destroy(self, request, pk=None): # /api/products/<str:id>
-        try:
-            review = Review.objects.get(pk=pk)
-            self.check_object_permissions(request, review)
-        except Product.DoesNotExist:
-            return Response(status=status.HTTP_404_NOT_FOUND)
-        review.delete()
+            serializer = ReviewSerializer(instance= review, data=request.data)
+            serializer.is_valid(raise_exception=True)
+            serializer.save()
+            # return Response(serializer.data)
+            return Response(serializer.data, status=status.HTTP_202_ACCEPTED)
+        else:
+            return Response({"msg":"Unauthorized"}, status.HTTP_401_UNAUTHORIZED)
+
+
+    def destroy(self, request, pk): # /api/products/<str:id>/reviews/
+        product = Product.objects.get(pk=pk)
+        reviews = product.review_set.all()
+        for i in range(len(reviews)):
+            review = reviews[i]
+            reviewer_id = review.user.id
+            requester_id = request.user.id
+            if reviewer_id == requester_id:
+                reviews[i].delete()
+        #     # except Review.DoesNotExist:
+        # # serializer = ReviewSerializer(data, many=True)
+        # # return Response(serializer.data)
+
+
+        # print("review user is", )
+        # try:
+        #     product = Product.objects.get(pk=pk)
+        #     print(product)
+        #     # print(product.reviews)
+        #     # self.check_object_permissions(request, review)
+        # except Product.DoesNotExist:
+        #     return Response(status=status.HTTP_404_NOT_FOUND)
+        # # review.delete()
         return Response({"msg": "Review Removed"}, status=status.HTTP_204_NO_CONTENT)
     
-    def get_permissions(self):
-        if self.action in USER_REQUEST:
-            permission_classes = [
-                # IsAuthenticated,
-            ]
-        # elif self.action in ADMIN_REQUEST:
-        #     permission_classes = [
-        #         IsAdminUser,
-        #     ]
-        else:
-            permission_classes = [IsAdminUser,]
+    # def get_permissions(self):
+    #     if self.action in USER_REQUEST:
+    #         permission_classes = [
+    #             # IsAuthenticated,
+    #         ]
+    #     # elif self.action in ADMIN_REQUEST:
+    #     #     permission_classes = [
+    #     #         IsAdminUser,
+    #     #     ]
+    #     else:
+    #         permission_classes = [IsAdminUser,]
 
-        return [permission() for permission in permission_classes]
+    #     return [permission() for permission in permission_classes]

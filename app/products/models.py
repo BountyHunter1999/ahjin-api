@@ -36,6 +36,8 @@ class Product(models.Model):
         max_digits=7,decimal_places=2, null=True, blank=True)
     numReviews = models.IntegerField(null=True, blank=True, default=0)
     
+    # color = models.
+    featured = models.BooleanField(default=False)
     image = models.URLField(max_length=200, default=DEFAULT_IMG)
     image2 = models.URLField(max_length=200, default=DEFAULT_IMG)
     image3 = models.URLField(max_length=200, default=DEFAULT_IMG)
