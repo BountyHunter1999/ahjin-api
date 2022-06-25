@@ -21,8 +21,14 @@ class ProductViewSet(viewsets.ModelViewSet):
     def list(self, request): # GET /api/products
         products = Product.objects.all()
         serializer = ProductSerializer(products, many=True)
-        # print(serializer)
-        return Response(serializer.data)
+        # print(request.query_params)
+        old_list = self.request.query_params.get("new") == "False"
+        if old_list:
+            data = serializer.data[::-1] 
+        # print(serializer.data[:2])
+        else:
+            data = serializer.data
+        return Response(data)
 
     def create(self, request): # POST /api/products
         serializer = ProductSerializer(data=request.data)
