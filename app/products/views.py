@@ -18,11 +18,20 @@ class ProductViewSet(viewsets.ModelViewSet):
     serializer_class = ProductSerializer
     queryset = Product.objects.all()
 
+    def _get_cat(self, data, cat):
+        data = data.filter(cat=cat)
+        return data
+
     def list(self, request): # GET /api/products
         products = Product.objects.all()
-        serializer = ProductSerializer(products, many=True)
         # print(request.query_params)
         old_list = self.request.query_params.get("new") == "False"
+        cat = self.request.query_params.get("cat")
+
+        # print("filter product", products.filter(cat=cat))
+        cat_data = self._get_cat(products, cat)
+        products = cat_data if cat else products
+        serializer = ProductSerializer(products, many=True)
         if old_list:
             data = serializer.data[::-1] 
         # print(serializer.data[:2])
