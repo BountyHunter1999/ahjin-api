@@ -1,4 +1,4 @@
-version: "3.3"
+version: "3.5"
 
 services:
   app:
@@ -25,12 +25,16 @@ services:
       - KHALTI_SECRET_KEY=${KHALTI_SECRET_KEY}
     depends_on:
       - db
+    networks:
+      ahjin_network:
+        aliases:
+          - app-backend
 
   db:
-    image: postgres:10-alpine
+    image: postgres:14-alpine
     restart: always
-    ports:
-      - "127.0.0.1:5432:5432"
+    # ports:
+    #   - "127.0.0.1:5432:5432"
     environment:
       - POSTGRES_DB=app
       - POSTGRES_USER=postgres
@@ -38,6 +42,15 @@ services:
     volumes:
       - db:/var/lib/postgresql/data
 
+    networks:
+      ahjin_network:
+        aliases:
+          - pg-database
+
 volumes:
   db:
     driver: local
+
+networks:
+  ahjin_network:
+    name: ahjin_network
