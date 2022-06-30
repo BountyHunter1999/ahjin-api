@@ -82,6 +82,9 @@ class Product(models.Model):
         self.full_clean()
         return super(Product, self).save(*args, **kwargs)
 
+    def count(self):
+        return len(self)
+
 
 
 class Review(models.Model):

@@ -115,7 +115,13 @@ class ReviewViewSet(viewsets.ModelViewSet):
     queryset = Review.objects.all()
 
     def list(self, request, pk): # GET /api/products/reviews/<str:prod_id>
-        product = Product.objects.get(pk=pk)
+        try:
+            product = Product.objects.get(pk=pk)
+            self.check_object_permissions(request, product)
+        except Product.DoesNotExist:
+            return Response(status=status.HTTP_404_NOT_FOUND)
+
+        # product = Product.objects.get(pk=pk)
         reviews = product.review_set.all()
         data = list()
         for i in range(len(reviews)):
@@ -135,9 +141,13 @@ class ReviewViewSet(viewsets.ModelViewSet):
         # print(f"request in review: {request.data}")
         # print(f"request user in review: {request.user.id}")
         # reviews = Review.objects.all()
+        try:
+            product = Product.objects.get(pk=pk)
+            self.check_object_permissions(request, product)
+        except Product.DoesNotExist:
+            return Response(status=status.HTTP_404_NOT_FOUND)
 
         user = request.user
-        product = Product.objects.get(id=pk)
         data = request.data
         # print("I WAS HERE HAI CREATE")
         # Review already exists, don't allow them to spam reviews
@@ -184,7 +194,13 @@ class ReviewViewSet(viewsets.ModelViewSet):
         # return Response(serializer.data, status=status.HTTP_201_CREATED)
 
     def partial_update(self, request, pk):
-        product = Product.objects.get(pk=pk)
+        try:
+            product = Product.objects.get(pk=pk)
+            self.check_object_permissions(request, product)
+        except Product.DoesNotExist:
+            return Response(status=status.HTTP_404_NOT_FOUND)
+
+        # product = Product.objects.get(pk=pk)
         reviews = product.review_set.all()
         data = dict()
         for i in range(len(reviews)):
@@ -210,7 +226,14 @@ class ReviewViewSet(viewsets.ModelViewSet):
 
 
     def destroy(self, request, pk): # /api/products/<str:id>/reviews/
-        product = Product.objects.get(pk=pk)
+        
+        try:
+            product = Product.objects.get(pk=pk)
+            self.check_object_permissions(request, product)
+        except Product.DoesNotExist:
+            return Response(status=status.HTTP_404_NOT_FOUND)
+        # product = Product.objects.get(pk=pk)
+
         reviews = product.review_set.all()
         for i in range(len(reviews)):
             review = reviews[i]
