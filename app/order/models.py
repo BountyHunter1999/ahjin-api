@@ -26,6 +26,9 @@ class Order(models.Model):
 
     delivered = models.BooleanField(default=False)
 
+    createdAt = models.DateTimeField(auto_now_add=True)
+    updatedAt = models.DateTimeField(auto_now=True)
+
     def __str__(self):
         return f"{self.user} bought {self.product.name} with {self.get_paymentMethod_display()}"
 

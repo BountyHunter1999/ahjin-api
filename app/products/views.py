@@ -126,12 +126,26 @@ class ReviewViewSet(viewsets.ModelViewSet):
         data = list()
         for i in range(len(reviews)):
             review = reviews[i]
+            print("ussername", review.user.username)
+            print("email", review.user.email)
+
+            user = {
+                "username": review.user.username,
+                "email": review.user.email,
+                "pk": review.user.id
+            }
+            # print(review.user, review.user.id, review.user.username)
             # print(i, type(review))
+            print(review.user.username)
             data.append({
                 "rating": review.rating,
                 "comment": review.comment,
                 "product": review.product,
-                "user": review.user,
+                "username": review.user.username,
+                "email": review.user.email,
+                "createdAt": review.createdAt,
+                "updatedAt": review.updatedAt,
+                # "user": user,
             })
         serializer = ReviewSerializer(data, many=True)
         return Response(serializer.data)

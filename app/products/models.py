@@ -88,7 +88,7 @@ class Product(models.Model):
 
 
 class Review(models.Model):
-    product = models.ForeignKey(Product, on_delete=models.SET_NULL,null=True)
+    product = models.ForeignKey(Product, on_delete=models.CASCADE,null=True)
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.SET_NULL, null=True)
     # user = models.ForeignKey(User, related_name='reviews', on_delete=models.SET_NULL, null=True)
     # name = models.CharField(max_length=200, null=True, blank=True)
