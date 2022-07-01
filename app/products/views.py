@@ -248,31 +248,25 @@ class ReviewViewSet(viewsets.ModelViewSet):
             product = Product.objects.get(pk=pk)
             self.check_object_permissions(request, product)
         except Product.DoesNotExist:
-            return Response(status=status.HTTP_404_NOT_FOUND)
+            return Response({"msg": "No such product"}, status=status.HTTP_404_NOT_FOUND)
         # product = Product.objects.get(pk=pk)
 
+        
+        # bulk delete
         reviews = product.review_set.all()
+        review_id = self.request.query_params.get("review")
+
         for i in range(len(reviews)):
             review = reviews[i]
             reviewer_id = review.user.id
             requester_id = request.user.id
-            if reviewer_id == requester_id:
-                reviews[i].delete()
-        #     # except Review.DoesNotExist:
-        # # serializer = ReviewSerializer(data, many=True)
-        # # return Response(serializer.data)
-
-
-        # print("review user is", )
-        # try:
-        #     product = Product.objects.get(pk=pk)
-        #     print(product)
-        #     # print(product.reviews)
-        #     # self.check_object_permissions(request, review)
-        # except Product.DoesNotExist:
-        #     return Response(status=status.HTTP_404_NOT_FOUND)
-        # # review.delete()
-        return Response({"msg": "Review Removed"}, status=status.HTTP_204_NO_CONTENT)
+            has_permission = reviewer_id == requester_id or request.user.is_superuser
+            correct_review = int(review_id) == review.id
+            if has_permission and correct_review:
+                # reviews[i].delete()
+                review.delete()
+            return Response({"msg": "Review Removed"}, status=status.HTTP_204_NO_CONTENT)
+        return Response({"msg": "Bad Request Bruh"}, status=status.HTTP_400_BAD_REQUEST)
     
     # def get_permissions(self):
     #     if self.action in USER_REQUEST:
