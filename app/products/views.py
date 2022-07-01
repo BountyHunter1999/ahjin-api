@@ -138,6 +138,7 @@ class ReviewViewSet(viewsets.ModelViewSet):
             # print(i, type(review))
             print(review.user.username)
             data.append({
+                "id": review.id,
                 "rating": review.rating,
                 "comment": review.comment,
                 "product": review.product,
