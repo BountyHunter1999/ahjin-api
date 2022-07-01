@@ -60,7 +60,8 @@ class CustomUserDetailsSerializer(UserDetailsSerializer):
         # # model = CustomUser
         fields = (
             'pk', 'email', 'phone_number', 
-            'ahjin_coin', 'is_admin', 'user_hash',
+            'ahjin_coin', 'is_superuser', 'user_hash',
+            'username'
         )
         # extra_kwargs = {
         #     'first_name': {'required': True},
