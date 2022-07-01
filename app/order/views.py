@@ -27,8 +27,10 @@ class OrderViewSet(viewsets.ModelViewSet):
         return Response(serializer.data)
     
     def create(self, request):
+        # print("I AM CREATING")
+        # print(request.data)
         self.check_object_permissions(request, request.data)
-        serializer = OrderSerializer(data=request.data)
+        serializer = OrderSerializer(data=request.data, many=True)
         serializer.is_valid(raise_exception=True)
         serializer.save()
         return Response(serializer.data, status=status.HTTP_201_CREATED)

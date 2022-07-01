@@ -41,6 +41,7 @@ class ProductViewSet(viewsets.ModelViewSet):
 
     def create(self, request): # POST /api/products
         serializer = ProductSerializer(data=request.data)
+        # serializer = ProductSerializer(data=request.data, many=True)
         serializer.is_valid(raise_exception=True)
         serializer.save()
         return Response(serializer.data, status=status.HTTP_201_CREATED)
