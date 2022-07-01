@@ -18,6 +18,12 @@ urlpatterns = [
     path('<str:pk>/reviews/', ReviewViewSet.as_view({
         'post': 'create',
         'get': 'list',
+        # 'delete': 'destroy',
+    })),
+    path('reviews/<str:pk>', ReviewViewSet.as_view({
+        # 'post': 'create',
+        # 'get': 'list',
+        # 'patch': 'partial_update',
         'patch': 'partial_update',
         'delete': 'destroy',
     })),

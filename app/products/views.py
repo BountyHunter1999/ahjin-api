@@ -211,62 +211,88 @@ class ReviewViewSet(viewsets.ModelViewSet):
         # return Response(serializer.data, status=status.HTTP_201_CREATED)
 
     def partial_update(self, request, pk):
+        # try:
+        #     product = Product.objects.get(pk=pk)
+        #     self.check_object_permissions(request, product)
+        # except Product.DoesNotExist:
+        #     return Response(status=status.HTTP_404_NOT_FOUND)
+
+        # # product = Product.objects.get(pk=pk)
+        # reviews = product.review_set.all()
+        # data = dict()
+        # for i in range(len(reviews)):
+        #     review = None
+        #     reviewer_id = reviews[i].user.id
+        #     requester_id = request.user.id
+        #     if reviewer_id == requester_id:
+        #         review = reviews[i] 
+            
+        # if review:
+        #     # data['rating'] = request.data.get("rating", review.rating)
+        #     # data['comment'] = request.data.get("comment", review.comment)
+        #     # data['product'] = review.product
+        #     # data['user'] = review.user
+
+        #     serializer = ReviewSerializer(instance= review, data=request.data)
+        #     serializer.is_valid(raise_exception=True)
+        #     serializer.save()
+        #     # return Response(serializer.data)
+        #     return Response(serializer.data, status=status.HTTP_202_ACCEPTED)
+        # else:
+        #     return Response({"msg":"Unauthorized"}, status.HTTP_401_UNAUTHORIZED)
         try:
-            product = Product.objects.get(pk=pk)
-            self.check_object_permissions(request, product)
-        except Product.DoesNotExist:
+            review = Review.objects.get(pk=pk)
+            self.check_object_permissions(request, review)
+        except Review.DoesNotExist:
             return Response(status=status.HTTP_404_NOT_FOUND)
 
-        # product = Product.objects.get(pk=pk)
-        reviews = product.review_set.all()
-        data = dict()
-        for i in range(len(reviews)):
-            review = None
-            reviewer_id = reviews[i].user.id
-            requester_id = request.user.id
-            if reviewer_id == requester_id:
-                review = reviews[i] 
-            
-        if review:
-            # data['rating'] = request.data.get("rating", review.rating)
-            # data['comment'] = request.data.get("comment", review.comment)
-            # data['product'] = review.product
-            # data['user'] = review.user
-
-            serializer = ReviewSerializer(instance= review, data=request.data)
+        if request.user == review.user or request.user.is_superuser:
+            serializer = ReviewSerializer(instance=review, data=request.data)
             serializer.is_valid(raise_exception=True)
+            print("valid")
             serializer.save()
-            # return Response(serializer.data)
             return Response(serializer.data, status=status.HTTP_202_ACCEPTED)
-        else:
-            return Response({"msg":"Unauthorized"}, status.HTTP_401_UNAUTHORIZED)
+        return Response({"msg":"Unauthorized"}, status.HTTP_401_UNAUTHORIZED)
 
 
     def destroy(self, request, pk): # /api/products/<str:id>/reviews/
-        
         try:
-            product = Product.objects.get(pk=pk)
-            self.check_object_permissions(request, product)
-        except Product.DoesNotExist:
-            return Response({"msg": "No such product"}, status=status.HTTP_404_NOT_FOUND)
+            review = Review.objects.get(pk=pk)
+            self.check_object_permissions(request, review)
+        except Review.DoesNotExist:
+            return Response({"msg": "No such review"}, status=status.HTTP_404_NOT_FOUND)
+
+        if request.user == review.user or request.user.is_superuser:
+            review.delete()
+            return Response({"msg": "Review removed"}, status=status.HTTP_204_NO_CONTENT)
+        return Response({"msg":"Unauthorized"}, status.HTTP_401_UNAUTHORIZED)
+
+
         # product = Product.objects.get(pk=pk)
+        # try:
+        #     product = Product.objects.get(pk=pk)
+        #     self.check_object_permissions(request, product)
+        # except Product.DoesNotExist:
+        #     return Response({"msg": "No such product"}, status=status.HTTP_404_NOT_FOUND)
+        # # product = Product.objects.get(pk=pk)
 
         
-        # bulk delete
-        reviews = product.review_set.all()
-        review_id = self.request.query_params.get("review")
+        # # bulk delete
+        # reviews = product.review_set.all()
+        # review_id = self.request.query_params.get("review")
 
-        for i in range(len(reviews)):
-            review = reviews[i]
-            reviewer_id = review.user.id
-            requester_id = request.user.id
-            has_permission = reviewer_id == requester_id or request.user.is_superuser
-            correct_review = int(review_id) == review.id
-            if has_permission and correct_review:
-                # reviews[i].delete()
-                review.delete()
-            return Response({"msg": "Review Removed"}, status=status.HTTP_204_NO_CONTENT)
-        return Response({"msg": "Bad Request Bruh"}, status=status.HTTP_400_BAD_REQUEST)
+        # for i in range(len(reviews)):
+        #     review = reviews[i]
+        #     reviewer_id = review.user.id
+        #     requester_id = request.user.id
+        #     has_permission = reviewer_id == requester_id or request.user.is_superuser
+        #     correct_review = int(review_id) == review.id
+        #     if has_permission and correct_review:
+        #         # reviews[i].delete()
+        #         review.delete()
+            
+            # return Response({"msg": "Review Removed"}, status=status.HTTP_204_NO_CONTENT)
+        # return Response({"msg": "Bad Request Bruh"}, status=status.HTTP_400_BAD_REQUEST)
     
     # def get_permissions(self):
     #     if self.action in USER_REQUEST:
