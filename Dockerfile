@@ -17,6 +17,7 @@ RUN apk add --update --no-cache --virtual .tmp-build-deps \
      postgresql-dev libffi-dev
 
 RUN pip install -r /requirements.txt
+RUN pip install python-dotenv
 
 # removing the temporary packages
 RUN apk del .tmp-build-deps
@@ -29,6 +30,13 @@ WORKDIR /app
 # Copy project
 COPY ./app /app
 
+# Copy the env variables
+COPY .env .env
+
 # Create a user and switch to it
 RUN adduser -D user
 USER user
+
+EXPOSE 8000
+
+CMD ["gunicorn", "--bind", ":8000", "--workers", "3", "app.wsgi:application"]

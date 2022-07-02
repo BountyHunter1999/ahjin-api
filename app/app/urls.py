@@ -15,6 +15,10 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path, include
+
+from django.conf import settings
+from django.conf.urls.static import static
+
 from .views import khaltiPay
 
 urlpatterns = [
@@ -23,4 +27,4 @@ urlpatterns = [
     path('api/products/', include('products.urls')),
     path('api/orders/', include('order.urls')),
     path("api/khalti/pay", khaltiPay, name="khalti-pay"),
-]
+] + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)

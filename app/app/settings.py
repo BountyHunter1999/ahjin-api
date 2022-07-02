@@ -12,6 +12,11 @@ https://docs.djangoproject.com/en/4.0/ref/settings/
 
 from pathlib import Path
 import os
+import logging.config
+
+from dotenv import load_dotenv
+
+load_dotenv()
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -24,16 +29,19 @@ my_env = os.environ
 
 # SECURITY WARNING: keep the secret key used in production secret!
 
-SECRET_KEY = my_env['DJANGO_SECRET_KEY']
+SECRET_KEY = os.getenv('DJANGO_SECRET_KEY')
+# SECRET_KEY = my_env['DJANGO_SECRET_KEY']
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
 
-ALLOWED_HOSTS = [
-    '0.0.0.0',
-    'localhost',
-    '127.0.0.1',
-]
+DEBUG = os.getenv('DJANGO_DEBUG', False)
+# DEBUG = True
 
+# ALLOWED_HOSTS = [
+#     '0.0.0.0',
+#     'localhost',
+#     '127.0.0.1',
+# ]
+ALLOWED_HOSTS = os.environ.get("DJANGO_ALLOWED_HOSTS").split(" ")
 
 # Application definition
 
@@ -145,7 +153,10 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/4.0/howto/static-files/
 
-STATIC_URL = 'static/'
+STATIC_URL = '/static/'
+STATIC_ROOT = os.path.join(BASE_DIR, 'static')
+# STATIC_ROOT = '/static/'
+print("STATIC ROOT IS", STATIC_ROOT)
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.0/ref/settings/#default-auto-field
@@ -160,7 +171,8 @@ ACCOUNT_AUTHENTICATION_METHOD = 'email'
 ACCOUNT_USERNAME_REQUIRED = False
 ACCOUNT_EMAIL_REQUIRED = True
 ACCOUNT_UNIQUE_EMAIL = True
-ACCOUNT_EMAIL_VERIFICATION = my_env['EMAIL_VERIFICATION_OPTION']
+# ACCOUNT_EMAIL_VERIFICATION = my_env['EMAIL_VERIFICATION_OPTION']
+ACCOUNT_EMAIL_VERIFICATION = os.getenv('EMAIL_VERIFICATION_OPTION', "mandatory")
 
 ACCOUNT_CONFIRM_EMAIL_ON_GET = True
 LOGIN_URL = 'http://localhost:8000/api/user/login'
@@ -208,7 +220,8 @@ SIMPLE_JWT = {
 JWT_AUTH_COOKIE = 'my-app-auth'
 
 # EMAIL_BACKEND = "sendgrid_backend.SendgridBackend"
-SENDGRID_API_KEY = my_env["SENDGRID_API_KEY"]
+# SENDGRID_API_KEY = my_env["SENDGRID_API_KEY"]
+SENDGRID_API_KEY = os.getenv("SENDGRID_API_KEY", None)
 
 # EMAIL_HOST = 'smtp.sendgrid.net'
 EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
@@ -219,3 +232,34 @@ EMAIL_PORT = 587
 EMAIL_USE_TLS = True
 
 CORS_ORIGIN_ALLOW_ALL = True
+
+# Logging Configuration
+# Logging Configuration
+
+# Clear prev config
+LOGGING_CONFIG = None
+
+# Get loglevel from env
+LOGLEVEL = os.getenv('DJANGO_LOGLEVEL', 'info').upper()
+
+logging.config.dictConfig({
+    'version': 1,
+    'disable_existing_loggers': False,
+    'formatters': {
+        'console': {
+            'format': '%(asctime)s %(levelname)s [%(name)s:%(lineno)s] %(module)s %(process)d %(thread)d %(message)s',
+        },
+    },
+    'handlers': {
+        'console': {
+            'class': 'logging.StreamHandler',
+            'formatter': 'console',
+        },
+    },
+    'loggers': {
+        '': {
+            'level': LOGLEVEL,
+            'handlers': ['console',],
+        },
+    },
+})

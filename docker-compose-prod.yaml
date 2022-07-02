@@ -2,27 +2,17 @@ version: "3.5"
 
 services:
   app:
+    container_name: app_k8s
     build:
       context: .
-    ports:
-      - "8000:8000"
+    expose:
+      - 8000
     volumes:
       - ./app:/app
     command: >
       sh -c "python manage.py wait_for_db && 
              python manage.py migrate &&
-             python manage.py runserver 0.0.0.0:8000"
-    # environment:
-    #   - DB_HOST=db
-    #   - DB_NAME=app
-    #   - DB_USER=postgres
-    #   - DB_PASS=secretpassword
-    #   - DJANGO_SECRET_KEY=${DJANGO_SECRET_KEY}
-    #   - GMAIL_ACC=${GMAIL_ACC}
-    #   - GMAIL_PW=${GMAIL_PW}
-    #   - EMAIL_VERIFICATION_OPTION=${EMAIL_VERIFICATION_OPTION:-none}
-    #   - SENDGRID_API_KEY=${SENDGRID_API_KEY}
-    #   - KHALTI_SECRET_KEY=${KHALTI_SECRET_KEY}
+             gunicorn app.wsgi:application --bind 0.0.0.0:8000"
     env_file:
       - .env
     depends_on:
@@ -48,10 +38,26 @@ services:
       ahjin_network:
         aliases:
           - pg-database
+    
+  nginx:
+    build: ./app/nginx
+    restart: always
+    container_name: nginx_k8s
+    volumes:
+      - static_volume:/home/app/web/staticfiles
+    ports:
+      - 8000:80
+    depends_on:
+      - app
+    networks:
+      ahjin_network:
+        aliases:
+          - nginx
 
 volumes:
   db:
     driver: local
+  static_volume:
 
 networks:
   ahjin_network:
