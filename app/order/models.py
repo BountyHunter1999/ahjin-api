@@ -16,21 +16,24 @@ PAYMENT_METHODS = (
 
 
 class Order(models.Model):
-    product = models.ForeignKey(Product, on_delete=models.SET_NULL, null=True)
+    # product = models.ForeignKey(Product, on_delete=models.SET_NULL, null=True)
+    products = models.JSONField(default=dict) 
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, null=True)
 
-    productChosen = models.IntegerField(null=True, blank=True, default=0)
+    # productChosen = models.IntegerField(null=True, blank=True, default=0)
     quantity = models.IntegerField(null=True, validators=[MinValueValidator(0)], blank=True, default=0)
 
     paymentMethod = models.CharField(max_length=12, choices=PAYMENT_METHODS)
 
     delivered = models.BooleanField(default=False)
 
+    total = models.FloatField(null=True, validators=[MinValueValidator(0)], blank=True, default=0.0)
+
     createdAt = models.DateTimeField(auto_now_add=True)
     updatedAt = models.DateTimeField(auto_now=True)
 
     def __str__(self):
-        return f"{self.user} bought {self.product.name} with {self.get_paymentMethod_display()}"
+        return f"{self.user} bought {len(self.products)} with {self.get_paymentMethod_display()}"
 
     def product_delivered(self):
         return self.delivered

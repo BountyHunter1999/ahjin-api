@@ -23,7 +23,7 @@ services:
           - app-backend
 
   db:
-    image: postgres:14-alpine
+    image: postgres:10-alpine
     restart: always
     # ports:
     #   - "127.0.0.1:5432:5432"

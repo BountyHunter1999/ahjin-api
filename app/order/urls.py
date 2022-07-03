@@ -10,7 +10,10 @@ urlpatterns = [
         'post': 'create'
     })),
     path('<str:pk>', OrderViewSet.as_view({
-        'get': 'retrieve',
+        'get': 'retrieve_order',
         'delete': 'destroy'
-    }))
+    })),
+    path('user/<str:pk>', OrderViewSet.as_view({
+        'get': 'retrieve_user_order'
+    })),
 ]

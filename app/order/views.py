@@ -11,8 +11,12 @@ from .serializers import OrderSerializer
 from rest_framework.permissions import IsAuthenticated, IsAdminUser
 
 
-USER_REQUEST = ['list', 'create']
-ADMIN_REQUEST = ['update', 'partial_update', 'destroy']
+# USER_REQUEST = ['retrieve_user_order', 'create', 'retrieve_order']
+USER_REQUEST = ['retrieve_user_order', 'create']
+ADMIN_REQUEST = ['list', 'update', 'partial_update', 'destroy']
+
+
+from django.contrib.auth import get_user_model as User
 
 
 class OrderViewSet(viewsets.ModelViewSet):
@@ -28,14 +32,19 @@ class OrderViewSet(viewsets.ModelViewSet):
     
     def create(self, request):
         # print("I AM CREATING")
-        # print(request.data)
-        self.check_object_permissions(request, request.data)
-        serializer = OrderSerializer(data=request.data, many=True)
+        data = request.data
+
+        # print(request.user.id)
+        data['user'] = request.user.id
+        # print(data)
+        self.check_object_permissions(request, data)
+        # serializer = OrderSerializer(data=request.data, many=True)
+        serializer = OrderSerializer(data=request.data)
         serializer.is_valid(raise_exception=True)
         serializer.save()
         return Response(serializer.data, status=status.HTTP_201_CREATED)
     
-    def retrieve(self, request, pk=None): # /api/products/<str:id>
+    def retrieve_order(self, request, pk=None): # /api/order/<str:id>  
 
         # superusers = User.objects
         # print(User().objects.filter(is_superuser=True)[0].ahjin_coin)
@@ -48,6 +57,23 @@ class OrderViewSet(viewsets.ModelViewSet):
             return Response(status=status.HTTP_404_NOT_FOUND)
         # count = len(order)
         # new_data = {"count": count}
+        serializer = OrderSerializer(order)
+        # new_data.update(serializer.data)
+        return Response(serializer.data)
+
+    def retrieve_user_order(self, request, pk=None): # /api/order/<str:id>   user_id
+
+        # superusers = User.objects
+        # print(User().objects.filter(is_superuser=True)[0].ahjin_coin)
+        # print(superusers)
+        # print(request)
+        orders = Order.objects.all()
+        try:
+            user = User().objects.get(pk=pk)
+            self.check_object_permissions(request, orders)
+        except User().DoesNotExist:
+            return Response(status=status.HTTP_404_NOT_FOUND)
+        order = orders.get(user=request.user)
         serializer = OrderSerializer(order)
         # new_data.update(serializer.data)
         return Response(serializer.data)
