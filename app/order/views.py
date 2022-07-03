@@ -24,10 +24,16 @@ class OrderViewSet(viewsets.ModelViewSet):
     queryset = Order.objects.all()
 
     def list(self, request): 
-        print(request.GET.get("delivered"), "delivered data")
-        orders = Order.objects.all()
+        is_delivered = request.GET.get("delivered", None)
+        if is_delivered == "T":
+            orders = Order.objects.filter(delivered = True)
+            # print(orders.get(delivered=True))
         # for order in orders:
         #     print(order, order.user)
+        elif is_delivered == "F":
+            orders = Order.objects.filter(delivered = False)
+        else:
+            orders = Order.objects.all()
 
         serializer = OrderSerializer(orders, many=True)
 
