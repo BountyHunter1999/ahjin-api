@@ -41,8 +41,8 @@ class Order(models.Model):
     def user_name(self):
         return self.user
 
-    def product_name(self):
-        return self.product.name
+    def total_product(self):
+        return len(self.products)
 
     def paid_with(self):
         return self.get_paymentMethod_display()

@@ -32,5 +32,5 @@ class ReviewSerializer(serializers.ModelSerializer):
                 #   'username', 'email', )
         # fields = '__all__'
         # read_only_fields = ['id', '']
-
+    
     

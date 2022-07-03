@@ -24,7 +24,10 @@ class OrderViewSet(viewsets.ModelViewSet):
     queryset = Order.objects.all()
 
     def list(self, request): 
+        print(request.GET.get("delivered"), "delivered data")
         orders = Order.objects.all()
+        # for order in orders:
+        #     print(order, order.user)
 
         serializer = OrderSerializer(orders, many=True)
 
@@ -34,7 +37,7 @@ class OrderViewSet(viewsets.ModelViewSet):
         # print("I AM CREATING")
         data = request.data
 
-        # print(request.user.id)
+        print(request.user.id, "user bandai xa")
         data['user'] = request.user.id
         # print(data)
         self.check_object_permissions(request, data)
