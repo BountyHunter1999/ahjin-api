@@ -10,6 +10,13 @@ from dj_rest_auth.jwt_auth import get_refresh_view
 from .views import CustomUserDetailsView, CustomLoginView, CustomRegisterView
 
 
+from .views import UserViewSet
+from rest_framework import routers
+
+router = routers.DefaultRouter()
+# router.register(r'users', UserViewSet)
+router.register(r'users', UserViewSet)
+
 
 urlpatterns = [
     path('register/', CustomRegisterView.as_view(), name='account_signup'),
@@ -32,4 +39,7 @@ urlpatterns = [
          PasswordResetConfirmView.as_view(), name='password_reset_confirm'), 
      path('token/verify/', TokenVerifyView.as_view(), name='token_verify'),
      path('token/refresh/', get_refresh_view().as_view(), name='token_refresh'),
+
+     # for admin purposes
+     path('all', include(router.urls))
 ]

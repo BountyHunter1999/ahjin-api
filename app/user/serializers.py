@@ -1,3 +1,4 @@
+from dataclasses import fields
 from django.db import transaction
 from rest_framework import serializers
 from dj_rest_auth.registration.serializers import RegisterSerializer
@@ -99,3 +100,13 @@ class CustomLoginSerializer(LoginSerializer):
 
         attrs['user'] = user
         return attrs
+
+
+
+from django.contrib.auth import get_user_model
+
+class UserSerializer(serializers.HyperlinkedModelSerializer):
+
+    class Meta:
+        model = get_user_model()
+        fields = ['pk', 'username', 'email', 'phone_number', 'phone_number']
