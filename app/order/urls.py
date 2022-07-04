@@ -11,9 +11,11 @@ urlpatterns = [
     })),
     path('<str:pk>', OrderViewSet.as_view({
         'get': 'retrieve_order',
-        'delete': 'destroy'
+        'delete': 'destroy',
+        'patch': 'update'
     })),
     path('user/<str:pk>', OrderViewSet.as_view({
-        'get': 'retrieve_user_order'
+        'get': 'retrieve_user_order',
+
     })),
 ]

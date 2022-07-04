@@ -97,6 +97,19 @@ class OrderViewSet(viewsets.ModelViewSet):
             return Response(status=status.HTTP_404_NOT_FOUND)
         order.delete()
         return Response({"msg": "Order Removed"}, status=status.HTTP_204_NO_CONTENT)
+    
+    def update(self, request, pk=None):
+        try:
+            order = Order.objects.get(pk=pk)
+            self.check_object_permissions(request, order)
+        except Order.DoesNotExist:
+            return Response(status=status.HTTP_404_NOT_FOUND)
+
+        serializer = OrderSerializer(instance=order, data=request.data)
+        serializer.is_valid(raise_exception=True)
+        print("valid")
+        serializer.save()
+        return Response(serializer.data, status=status.HTTP_202_ACCEPTED)
 
     def get_permissions(self):
         if self.action in USER_REQUEST:
