@@ -82,8 +82,9 @@ class OrderViewSet(viewsets.ModelViewSet):
             self.check_object_permissions(request, orders)
         except User().DoesNotExist:
             return Response(status=status.HTTP_404_NOT_FOUND)
-        order = orders.get(user=request.user)
-        serializer = OrderSerializer(order)
+        order = orders.filter(user=request.user)
+        print(order)
+        serializer = OrderSerializer(order, many=True)
         # new_data.update(serializer.data)
         return Response(serializer.data)
         # return Response(new_data)
