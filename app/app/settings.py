@@ -175,7 +175,8 @@ ACCOUNT_UNIQUE_EMAIL = True
 ACCOUNT_EMAIL_VERIFICATION = os.getenv('EMAIL_VERIFICATION_OPTION', "mandatory")
 
 ACCOUNT_CONFIRM_EMAIL_ON_GET = True
-LOGIN_URL = 'http://localhost:8000/api/user/login'
+# LOGIN_URL = 'http://localhost:8000/api/user/login'
+LOGIN_URL = 'http://localhost:3000/login'
 
 REST_AUTH_REGISTER_SERIALIZERS = {
     'REGISTER_SERIALIZER': 'user.serializers.CustomRegisterSerializer',
