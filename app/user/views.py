@@ -6,6 +6,9 @@ from django.contrib.auth.models import BaseUserManager, AbstractBaseUser
 from rest_framework.generics import RetrieveUpdateAPIView
 
 
+from rest_framework import viewsets, status
+
+from rest_framework.response import Response
 # class UserManager(BaseUserManager):
 
 #     def create_superuser(self, email, password):
@@ -99,4 +102,20 @@ class UserViewSet(viewsets.ModelViewSet):
     serializer_class = UserSerializer
     permission_classes = [IsAdminUser, ]
 
+    def list(self, request):
+        print("I am calling list")
+        users = get_user_model().objects.all().order_by('-date_joined')
+        serializer = UserSerializer(users, many=True)
 
+        return Response(serializer.data)
+
+    def destroy(self, request, pk=None): # /api/orders/<str:id>
+        # user = request.user
+        print("deleting user hai")
+        try:
+            user = get_user_model().objects.get(pk=pk)
+            self.check_object_permissions(request, user)
+        except get_user_model().DoesNotExist:
+            return Response(status=status.HTTP_404_NOT_FOUND)
+        user.delete()
+        return Response({"msg": "User Removed"}, status=status.HTTP_204_NO_CONTENT)

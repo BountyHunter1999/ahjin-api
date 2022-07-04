@@ -13,9 +13,9 @@ from .views import CustomUserDetailsView, CustomLoginView, CustomRegisterView
 from .views import UserViewSet
 from rest_framework import routers
 
-router = routers.DefaultRouter()
+# router = routers.DefaultRouter()
+# # router.register(r'users', UserViewSet)
 # router.register(r'users', UserViewSet)
-router.register(r'users', UserViewSet)
 
 
 urlpatterns = [
@@ -41,5 +41,12 @@ urlpatterns = [
      path('token/refresh/', get_refresh_view().as_view(), name='token_refresh'),
 
      # for admin purposes
-     path('all', include(router.urls))
+     path('allusers', UserViewSet.as_view({
+          'get': 'list',
+          'delete': 'destroy'
+     })),
+     path('allusers/<str:pk>', UserViewSet.as_view({
+          'delete': 'destroy'
+     }))
+     # path('all', include(router.urls))
 ]
