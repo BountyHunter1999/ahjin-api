@@ -13,7 +13,7 @@ class OrderSerializer(serializers.ModelSerializer):
         fields =  ["id", "user", "quantity", 
                     "paymentMethod", "products",
                    "delivered", "total", "createdAt",
-                   "updatedAt", "username", "email"
+                   "updatedAt", "username", "email",
                    "isRewarded", "currentAccount"]
         read_only_field = ['id', 'user', 'delivered', 'total']
         
