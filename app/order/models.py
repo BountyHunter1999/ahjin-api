@@ -29,6 +29,9 @@ class Order(models.Model):
 
     total = models.FloatField(null=True, validators=[MinValueValidator(0)], blank=True, default=0.0)
 
+    isRewarded = models.BooleanField(default=False)
+    currentAccount = models.CharField(max_length=50, blank=True, null=True)
+
     createdAt = models.DateTimeField(auto_now_add=True)
     updatedAt = models.DateTimeField(auto_now=True)
 
