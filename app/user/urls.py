@@ -11,7 +11,12 @@ from .views import CustomUserDetailsView, CustomLoginView, CustomRegisterView
 
 
 from .views import UserViewSet
-from rest_framework import routers
+
+
+from dj_rest_auth.views import (
+     PasswordChangeView
+)
+
 
 # router = routers.DefaultRouter()
 # # router.register(r'users', UserViewSet)
@@ -37,6 +42,9 @@ urlpatterns = [
     path('password-reset/', PasswordResetView.as_view()),
     path('password-reset-confirm/<uidb64>/<token>/',
          PasswordResetConfirmView.as_view(), name='password_reset_confirm'), 
+
+     path('password/change/', PasswordChangeView.as_view(), name='rest_password_change'),
+
      path('token/verify/', TokenVerifyView.as_view(), name='token_verify'),
      path('token/refresh/', get_refresh_view().as_view(), name='token_refresh'),
 

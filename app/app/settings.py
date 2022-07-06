@@ -178,6 +178,10 @@ ACCOUNT_CONFIRM_EMAIL_ON_GET = True
 # LOGIN_URL = 'http://localhost:8000/api/user/login'
 LOGIN_URL = 'http://localhost:3000/login'
 
+# Password change
+OLD_PASSWORD_FIELD_ENABLED = True
+LOGOUT_ON_PASSWORD_CHANGE = False
+
 REST_AUTH_REGISTER_SERIALIZERS = {
     'REGISTER_SERIALIZER': 'user.serializers.CustomRegisterSerializer',
 }
