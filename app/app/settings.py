@@ -237,12 +237,21 @@ JWT_AUTH_COOKIE = 'my-app-auth'
 SENDGRID_API_KEY = os.getenv("SENDGRID_API_KEY", None)
 
 # EMAIL_HOST = 'smtp.sendgrid.net'
-EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
+EMAIL_BACKEND = os.getenv('EMAIL_BACKEND', 
+                    'django.core.mail.backends.console.EmailBackend'
+                )
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'               
 # EMAIL_BACKEND = "sendgrid_backend.SendgridBackend"
-EMAIL_HOST_USER = 'apikey' # this is exactly the value 'apikey'
-EMAIL_HOST_PASSWORD = SENDGRID_API_KEY
+
+EMAIL_HOST_USER = os.getenv("GMAIL_ACC") # this is exactly the value 'apikey'
+EMAIL_HOST_PASSWORD = os.getenv("GMAIL_PW")
+EMAIL_HOST = os.getenv("EMAIL_HOST")
+# TLS is 587 SSL 465
+# EMAIL_PORT = int(os.getenv("EMAIL_PORT", 587))
 EMAIL_PORT = 587
-EMAIL_USE_TLS = True
+# EMAIL_USE_TLS = os.getenv("EMAIL_USE_TLS", True) == True
+EMAIL_USE_TLS =  True
+# EMAIL_USE_SSL = os.getenv("EMAIL_USE_SSL", False)
 
 CORS_ORIGIN_ALLOW_ALL = True
 
