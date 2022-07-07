@@ -240,7 +240,7 @@ SENDGRID_API_KEY = os.getenv("SENDGRID_API_KEY", None)
 EMAIL_BACKEND = os.getenv('EMAIL_BACKEND', 
                     'django.core.mail.backends.console.EmailBackend'
                 )
-EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'               
+# EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'               
 # EMAIL_BACKEND = "sendgrid_backend.SendgridBackend"
 
 EMAIL_HOST_USER = os.getenv("GMAIL_ACC") # this is exactly the value 'apikey'
