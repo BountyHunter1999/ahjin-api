@@ -89,7 +89,7 @@ ROOT_URLCONF = 'app.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        'DIRS': [os.path.join(BASE_DIR, 'user/templates')],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -101,7 +101,8 @@ TEMPLATES = [
         },
     },
 ]
-
+print(BASE_DIR)
+print(os.path.join(BASE_DIR, 'user/templates'))
 WSGI_APPLICATION = 'app.wsgi.application'
 
 
@@ -176,11 +177,14 @@ ACCOUNT_EMAIL_VERIFICATION = os.getenv('EMAIL_VERIFICATION_OPTION', "mandatory")
 
 ACCOUNT_CONFIRM_EMAIL_ON_GET = True
 # LOGIN_URL = 'http://localhost:8000/api/user/login'
-LOGIN_URL = 'http://localhost:3000/login'
+LOGIN_URL = f"{os.getenv('FRONT_END_URL')}/login"
 
 # Password change
 OLD_PASSWORD_FIELD_ENABLED = True
 LOGOUT_ON_PASSWORD_CHANGE = False
+
+# Password reset
+PASSWORD_RESET_URL = f"{os.getenv('FRONT_END_URL')}/user/change-password"
 
 REST_AUTH_REGISTER_SERIALIZERS = {
     'REGISTER_SERIALIZER': 'user.serializers.CustomRegisterSerializer',
@@ -188,7 +192,11 @@ REST_AUTH_REGISTER_SERIALIZERS = {
 
 REST_AUTH_SERIALIZERS = {
     'USER_DETAILS_SERIALIZER': 'user.serializers.CustomUserDetailsSerializer',
+    'PASSWORD_RESET_SERIALIZER': 'user.serializers.CustomPasswordResetSerializer',
+
 }
+
+
 
 AUTHENTICATION_BACKENDS = [
     # allauth specific authentication methods, such as login by e-mail
