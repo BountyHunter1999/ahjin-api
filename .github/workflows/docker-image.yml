@@ -27,7 +27,9 @@ jobs:
             echo FRONT_END_URL= http://localhost:3000 >> /home/runner/work/ahjin-api/ahjin-api/.env
             echo EMAIL_BACKEND= django.core.mail.backends.smtp.EmailBackend >> /home/runner/work/ahjin-api/ahjin-api/.env
             echo EMAIL_VERIFICATION_OPTION= mandatory >> /home/runner/work/ahjin-api/ahjin-api/.env
-            
+            ls ${{ github.workspace }}
+          shell: bash
+          
         - name: Checkout
           uses: actions/checkout@v1
           
