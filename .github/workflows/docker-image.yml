@@ -1,0 +1,27 @@
+name: Docker Image CI
+
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+
+jobs:
+  docker:
+      runs-on: ubuntu-latest
+      steps:
+        -
+          name: Build the Docker image
+          run: docker build . --file Dockerfile --tag my-image-name:$(date +%s)
+        -
+          name: Perform some test and linting
+          run: echo "PERFORMING SOME TEST AND CHECKING LINTING"
+        -  
+          name: Login to DockerHub
+          uses: docker/login-action@v2
+          with:
+            username: ${{ secrets.DOCKERHUB_USERNAME }}
+            password: ${{ secrets.DOCKERHUB_PW }}
+        - 
+          name: Build and push
+          run: docker-compose -f docker-compose-prod.yaml push
