@@ -3,6 +3,7 @@ version: "3.5"
 services:
   app:
     container_name: app_k8s
+    image: mikeyy19xx/my_app_proj1:latest 
     build:
       context: .
     expose:
@@ -12,7 +13,7 @@ services:
     command: >
       sh -c "python manage.py wait_for_db && 
              python manage.py migrate &&
-             gunicorn app.wsgi:application --bind 0.0.0.0:8000"
+             gunicorn app.wsgi:application --workers 3 --bind 0.0.0.0:8000"
     env_file:
       - .env
     depends_on:
@@ -25,12 +26,8 @@ services:
   db:
     image: postgres:10-alpine
     restart: always
-    # ports:
-    #   - "127.0.0.1:5432:5432"
-    environment:
-      - POSTGRES_DB=app
-      - POSTGRES_USER=postgres
-      - POSTGRES_PASSWORD=secretpassword
+    env_file:
+      - .env
     volumes:
       - db:/var/lib/postgresql/data
 
@@ -41,6 +38,7 @@ services:
     
   nginx:
     build: ./app/nginx
+    image: mikeyy19xx/my_nginx_proj1:latest
     restart: always
     container_name: nginx_k8s
     volumes:
@@ -53,6 +51,16 @@ services:
       ahjin_network:
         aliases:
           - nginx
+  
+  front:
+    image: mikeyy19xx/colz_app_proj1:latest
+    ports:
+    - 127.0.0.1:3000:3000
+    networks:
+      - ahjin_network
+    depends_on:
+      - nginx
+      - app
 
 volumes:
   db:

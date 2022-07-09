@@ -12,26 +12,21 @@ jobs:
       environment: .env
       steps:
         - name: Make envfile
-          uses: SpicyPizza/create-envfile@v1.3
-          with:
-            KHALTI_SECRET_KEY: ${{ secrets.KHALTI_SECRET_KEY }}
-            POSTGRES_HOST: db
-            POSTGRES_NAME: app
-            POSTGRES_USER: postgres
-            POSTGRES_PASSWORD: ${{ secrets.POSTGRES_PASSWORD }}
-            DJANGO_ALLOWED_HOSTS: localhost 127.0.0.1 0.0.0.0 [::1]
-            GMAIL_PW: ${{ secrets.GMAIL_PW }}
-            GMAIL_ACC: ${{ secrets.GMAIL_ACC }}
-            EMAIL_USE_TLS: True
-            EMAIL_HOST: smtp.gmail.com
-            FRONT_END_URL: http://localhost:3000
-            EMAIL_BACKEND: django.core.mail.backends.smtp.EmailBackend
-            EMAIL_VERIFICATION_OPTION: mandatory
-            
-            
-            directory: <directory_name>
-            file_name: .env
-            fail_on_empty: false
+          run: |
+            touch .env
+            echo KHALTI_SECRET_KEY= ${{ secrets.KHALTI_SECRET_KEY }} >> .env
+            echo POSTGRES_HOST= db >> .env
+            echo POSTGRES_NAME= app >> .env
+            echo POSTGRES_USER= postgres >> .env
+            echo POSTGRES_PASSWORD= ${{ secrets.POSTGRES_PASSWORD }} >> .env
+            echo DJANGO_ALLOWED_HOSTS= localhost 127.0.0.1 0.0.0.0 [::1] >> .env
+            echo GMAIL_PW= ${{ secrets.GMAIL_PW }} >> .env
+            echo GMAIL_ACC= ${{ secrets.GMAIL_ACC }} >> .env
+            echo EMAIL_USE_TLS= True >> .env
+            echo EMAIL_HOST= smtp.gmail.com >> .env
+            echo FRONT_END_URL= http://localhost:3000 >> .env
+            echo EMAIL_BACKEND= django.core.mail.backends.smtp.EmailBackend >> .env
+            echo EMAIL_VERIFICATION_OPTION= mandatory >> .env
             
         - name: Checkout
           uses: actions/checkout@v1

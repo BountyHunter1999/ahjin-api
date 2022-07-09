@@ -13,6 +13,7 @@ https://docs.djangoproject.com/en/4.0/ref/settings/
 from pathlib import Path
 import os
 import logging.config
+from django.core.management.utils import get_random_secret_key
 
 from dotenv import load_dotenv
 
@@ -29,11 +30,13 @@ my_env = os.environ
 
 # SECURITY WARNING: keep the secret key used in production secret!
 
-SECRET_KEY = os.getenv('DJANGO_SECRET_KEY')
+SECRET_KEY = os.getenv("SECRET_KEY",
+        get_random_secret_key()
+        )
 # SECRET_KEY = my_env['DJANGO_SECRET_KEY']
 # SECURITY WARNING: don't run with debug turned on in production!
 
-DEBUG = os.getenv('DJANGO_DEBUG', False)
+DEBUG = os.getenv('DJANGO_DEBUG', "False") == "True"
 # DEBUG = True
 
 # ALLOWED_HOSTS = [
@@ -89,7 +92,7 @@ ROOT_URLCONF = 'app.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [os.path.join(BASE_DIR, 'user/templates')],
+        'DIRS': [],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -101,8 +104,7 @@ TEMPLATES = [
         },
     },
 ]
-print(BASE_DIR)
-print(os.path.join(BASE_DIR, 'user/templates'))
+
 WSGI_APPLICATION = 'app.wsgi.application'
 
 
@@ -112,11 +114,11 @@ WSGI_APPLICATION = 'app.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'HOST': os.environ.get('DB_HOST'),
-        'NAME': os.environ.get('DB_NAME'),
-        'USER': os.environ.get('DB_USER'),
-        'PASSWORD': os.environ.get('DB_PASS'),
-    }
+        'HOST': os.environ.get('POSTGRES_HOST'),
+        'NAME': os.environ.get('POSTGRES_NAME'),
+        'USER': os.environ.get('POSTGRES_USER'),
+        'PASSWORD': os.environ.get('POSTGRES_PASSWORD'),
+        }
 }
 
 
@@ -254,6 +256,11 @@ EMAIL_USE_TLS =  True
 # EMAIL_USE_SSL = os.getenv("EMAIL_USE_SSL", False)
 
 CORS_ORIGIN_ALLOW_ALL = True
+# CORS_ORIGIN_WHITELIST = [
+#     'http://localhost:8000',
+#     'http://localhost:3000',
+    
+# ]
 
 # Logging Configuration
 # Logging Configuration
