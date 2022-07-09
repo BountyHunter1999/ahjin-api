@@ -9,6 +9,7 @@ on:
 jobs:
   docker:
       runs-on: ubuntu-latest
+      environment: .env
       steps:
         - name: Make envfile
           uses: SpicyPizza/create-envfile@v1.3
