@@ -10,6 +10,9 @@ jobs:
   docker:
       runs-on: ubuntu-latest
       steps:
+        - 
+          name: Checking the directory
+          run: ls -la
         -
           name: Build the Docker image
           run: docker-compose -f docker-compose-prod.yaml build
