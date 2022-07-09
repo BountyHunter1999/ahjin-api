@@ -29,7 +29,7 @@ jobs:
             envkey_EMAIL_VERIFICATION_OPTION: mandatory
             
             
-            directory: ${{ github.workspace }}
+            directory: ../ahjin-api/ahjin-api/.env
             file_name: .env
             fail_on_empty: false
             
