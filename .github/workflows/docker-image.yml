@@ -37,6 +37,7 @@ jobs:
             echo EMAIL_BACKEND= django.core.mail.backends.smtp.EmailBackend >> ${{ github.workspace }}/.env
             echo EMAIL_VERIFICATION_OPTION= mandatory >> ${{ github.workspace }}/.env
             ls ${{ github.workspace }}
+            cat ${{ github.workspace }}/.env
           shell: bash
             
 
