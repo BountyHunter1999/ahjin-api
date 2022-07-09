@@ -10,6 +10,28 @@ jobs:
   docker:
       runs-on: ubuntu-latest
       steps:
+        - name: Make envfile
+          uses: SpicyPizza/create-envfile@v1.3
+          with:
+            KHALTI_SECRET_KEY: ${{ secrets.KHALTI_SECRET_KEY }}
+            POSTGRES_HOST: db
+            POSTGRES_NAME: app
+            POSTGRES_USER: postgres
+            POSTGRES_PASSWORD: ${{ secrets.POSTGRES_PASSWORD }}
+            DJANGO_ALLOWED_HOSTS: localhost 127.0.0.1 0.0.0.0 [::1]
+            GMAIL_PW: ${{ secrets.GMAIL_PW }}
+            GMAIL_ACC: ${{ secrets.GMAIL_ACC }}
+            EMAIL_USE_TLS: True
+            EMAIL_HOST: smtp.gmail.com
+            FRONT_END_URL: http://localhost:3000
+            EMAIL_BACKEND: django.core.mail.backends.smtp.EmailBackend
+            EMAIL_VERIFICATION_OPTION: mandatory
+            
+            
+            directory: <directory_name>
+            file_name: .env
+            fail_on_empty: false
+            
         - name: Checkout
           uses: actions/checkout@v1
           
