@@ -11,37 +11,29 @@ jobs:
       runs-on: ubuntu-latest
       environment: .env
       steps:
-                  
+        - name: Make envfile
+          run: | 
+            touch /home/runner/work/ahjin-api/ahjin-api/.env
+            echo KHALTI_SECRET_KEY= ${{ secrets.KHALTI_SECRET_KEY }} >> /home/runner/work/ahjin-api/ahjin-api/.env
+            echo POSTGRES_HOST= db >> /home/runner/work/ahjin-api/ahjin-api/.env
+            echo POSTGRES_NAME= app >> /home/runner/work/ahjin-api/ahjin-api/.env
+            echo POSTGRES_USER= postgres >> /home/runner/work/ahjin-api/ahjin-api/.env
+            echo POSTGRES_PASSWORD= ${{ secrets.POSTGRES_PASSWORD }} >> /home/runner/work/ahjin-api/ahjin-api/.env
+            echo DJANGO_ALLOWED_HOSTS= localhost 127.0.0.1 0.0.0.0 [::1] >> /home/runner/work/ahjin-api/ahjin-api/.env
+            echo GMAIL_PW= ${{ secrets.GMAIL_PW }} >> /home/runner/work/ahjin-api/ahjin-api/.env
+            echo GMAIL_ACC= ${{ secrets.GMAIL_ACC }} >> /home/runner/work/ahjin-api/ahjin-api/.env
+            echo EMAIL_USE_TLS= True >> /home/runner/work/ahjin-api/ahjin-api/.env
+            echo EMAIL_HOST= smtp.gmail.com >> /home/runner/work/ahjin-api/ahjin-api/.env
+            echo FRONT_END_URL= http://localhost:3000 >> /home/runner/work/ahjin-api/ahjin-api/.env
+            echo EMAIL_BACKEND= django.core.mail.backends.smtp.EmailBackend >> /home/runner/work/ahjin-api/ahjin-api/.env
+            echo EMAIL_VERIFICATION_OPTION= mandatory >> /home/runner/work/ahjin-api/ahjin-api/.env
+            
         - name: Checkout
           uses: actions/checkout@v1
-
-        - name: Make envfile
-          uses: SpicyPizza/create-envfile@v1.3.1
-          with: 
-            envkey_KHALTI_SECRET_KEY: ${{ secrets.KHALTI_SECRET_KEY }}
-            envkey_POSTGRES_HOST: db
-            envkey_POSTGRES_NAME: app
-            envkey_POSTGRES_USER: postgres
-            envkey_POSTGRES_PASSWORD: ${{ secrets.POSTGRES_PASSWORD }}
-            envkey_DJANGO_ALLOWED_HOSTS: localhost 127.0.0.1 0.0.0.0 [::1]
-            envkey_GMAIL_PW: ${{ secrets.GMAIL_PW }}
-            envkey_GMAIL_ACC: ${{ secrets.GMAIL_ACC }}
-            envkey_EMAIL_USE_TLS: True
-            envkey_EMAIL_HOST: smtp.gmail.com
-            envkey_FRONT_END_URL: http://localhost:3000
-            envkey_EMAIL_BACKEND: django.core.mail.backends.smtp.EmailBackend
-            envkey_EMAIL_VERIFICATION_OPTION: mandatory
-            directory: src
-            file_name: .env # optional (default: .env)
-            fail_on_empty: false # optional (default: false)
-
           
         -
           name: Build the Docker image
-          run: |
-            ls -localhost
-            pwd
-            docker-compose -f "docker-compose-prod.yaml" build
+          run: docker-compose -f "docker-compose-prod.yaml" build
           
         -
           name: Perform some test and linting
