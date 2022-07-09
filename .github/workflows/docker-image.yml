@@ -13,20 +13,20 @@ jobs:
       steps:
         - name: Make envfile
           run: | 
-            touch /home/runner/work/ahjin-api/ahjin-api/.env
-            echo KHALTI_SECRET_KEY= ${{ secrets.KHALTI_SECRET_KEY }} >> /home/runner/work/ahjin-api/ahjin-api/.env
-            echo POSTGRES_HOST= db >> /home/runner/work/ahjin-api/ahjin-api/.env
-            echo POSTGRES_NAME= app >> /home/runner/work/ahjin-api/ahjin-api/.env
-            echo POSTGRES_USER= postgres >> /home/runner/work/ahjin-api/ahjin-api/.env
-            echo POSTGRES_PASSWORD= ${{ secrets.POSTGRES_PASSWORD }} >> /home/runner/work/ahjin-api/ahjin-api/.env
-            echo DJANGO_ALLOWED_HOSTS= localhost 127.0.0.1 0.0.0.0 [::1] >> /home/runner/work/ahjin-api/ahjin-api/.env
-            echo GMAIL_PW= ${{ secrets.GMAIL_PW }} >> /home/runner/work/ahjin-api/ahjin-api/.env
-            echo GMAIL_ACC= ${{ secrets.GMAIL_ACC }} >> /home/runner/work/ahjin-api/ahjin-api/.env
-            echo EMAIL_USE_TLS= True >> /home/runner/work/ahjin-api/ahjin-api/.env
-            echo EMAIL_HOST= smtp.gmail.com >> /home/runner/work/ahjin-api/ahjin-api/.env
-            echo FRONT_END_URL= http://localhost:3000 >> /home/runner/work/ahjin-api/ahjin-api/.env
-            echo EMAIL_BACKEND= django.core.mail.backends.smtp.EmailBackend >> /home/runner/work/ahjin-api/ahjin-api/.env
-            echo EMAIL_VERIFICATION_OPTION= mandatory >> /home/runner/work/ahjin-api/ahjin-api/.env
+            touch .env
+            echo KHALTI_SECRET_KEY= ${{ secrets.KHALTI_SECRET_KEY }} >> .env
+            echo POSTGRES_HOST= db >> .env
+            echo POSTGRES_NAME= app >> .env
+            echo POSTGRES_USER= postgres >> .env
+            echo POSTGRES_PASSWORD= ${{ secrets.POSTGRES_PASSWORD }} >> .env
+            echo DJANGO_ALLOWED_HOSTS= localhost 127.0.0.1 0.0.0.0 [::1] >> .env
+            echo GMAIL_PW= ${{ secrets.GMAIL_PW }} >> .env
+            echo GMAIL_ACC= ${{ secrets.GMAIL_ACC }} >> .env
+            echo EMAIL_USE_TLS= True >> .env
+            echo EMAIL_HOST= smtp.gmail.com >> .env
+            echo FRONT_END_URL= http://localhost:3000 >> .env
+            echo EMAIL_BACKEND= django.core.mail.backends.smtp.EmailBackend >> .env
+            echo EMAIL_VERIFICATION_OPTION= mandatory >> .env
             ls ${{ github.workspace }}
           shell: bash
           
