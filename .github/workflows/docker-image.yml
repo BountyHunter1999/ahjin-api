@@ -12,7 +12,7 @@ jobs:
       steps:
         -
           name: Build the Docker image
-          run: docker build . --file Dockerfile --tag my-image-name:$(date +%s)
+          run: docker-compose -f docker-compose-prod.yaml build
         -
           name: Perform some test and linting
           run: echo "PERFORMING SOME TEST AND CHECKING LINTING"
