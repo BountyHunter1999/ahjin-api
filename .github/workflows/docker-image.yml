@@ -16,6 +16,9 @@ jobs:
         - 
           name: Checking the directory
           run: ls -la ../
+        - 
+          name: Checking the inside the directory
+          run: ls -la ../ahjin-api
         -
           name: Build the Docker image
           run: docker-compose -f docker-compose-prod.yaml build
