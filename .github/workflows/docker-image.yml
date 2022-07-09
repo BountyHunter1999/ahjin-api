@@ -27,7 +27,7 @@ jobs:
             envkey_FRONT_END_URL: http://localhost:3000
             envkey_EMAIL_BACKEND: django.core.mail.backends.smtp.EmailBackend
             envkey_EMAIL_VERIFICATION_OPTION: mandatory
-            directory: /home/runner/work/ahjin-api/ahjin-api/
+            directory: src
             file_name: .env # optional (default: .env)
             fail_on_empty: false # optional (default: false)
             
