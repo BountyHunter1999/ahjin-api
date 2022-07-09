@@ -11,8 +11,12 @@ jobs:
       runs-on: ubuntu-latest
       environment: .env
       steps:
+                  
+        - name: Checkout
+          uses: actions/checkout@v1
+
         - name: Make envfile
-          uses: SpicyPizza/create-envfile@v1.3
+          uses: SpicyPizza/create-envfile@v1.3.1
           with: 
             envkey_KHALTI_SECRET_KEY: ${{ secrets.KHALTI_SECRET_KEY }}
             envkey_POSTGRES_HOST: db
@@ -30,13 +34,14 @@ jobs:
             directory: src
             file_name: .env # optional (default: .env)
             fail_on_empty: false # optional (default: false)
-            
-        - name: Checkout
-          uses: actions/checkout@v1
+
           
         -
           name: Build the Docker image
-          run: docker-compose -f "docker-compose-prod.yaml" build
+          run: |
+            ls -localhost
+            pwd
+            docker-compose -f "docker-compose-prod.yaml" build
           
         -
           name: Perform some test and linting
