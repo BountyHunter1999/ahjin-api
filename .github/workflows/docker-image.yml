@@ -11,6 +11,15 @@ jobs:
       runs-on: ubuntu-latest
       environment: .env
       steps:
+        - name: see the directory
+          run: ls -la ../
+
+        - name: see the directory
+          run: ls -la ../ahjin-api
+
+        - name: see the directory
+          run: ls -la ../ahjin-api/../ahjin-api
+
         - name: Make envfile
           uses: SpicyPizza/create-envfile@v1.3
           with:
@@ -29,33 +38,33 @@ jobs:
             envkey_EMAIL_VERIFICATION_OPTION: mandatory
             
             
-            directory: ~/ahjin-api/ahjin-api/
+            directory: ../
             file_name: .env
             fail_on_empty: false
             
         - name: Checkout
           uses: actions/checkout@v1
           
-        -
-          name: Build the Docker image
-          run: docker-compose -f "docker-compose-prod.yaml" build
+        # -
+        #   name: Build the Docker image
+        #   run: docker-compose -f "docker-compose-prod.yaml" build
           
-        -
-          name: Perform some test and linting
-          run: echo "PERFORMING SOME TEST AND CHECKING LINTING"
+        # -
+        #   name: Perform some test and linting
+        #   run: echo "PERFORMING SOME TEST AND CHECKING LINTING"
           
-        -  
-          name: Login to DockerHub
-          uses: docker/login-action@v2
-          with:
-            username: ${{ secrets.DOCKERHUB_USERNAME }}
-            password: ${{ secrets.DOCKERHUB_PW }}
+        # -  
+        #   name: Login to DockerHub
+        #   uses: docker/login-action@v2
+        #   with:
+        #     username: ${{ secrets.DOCKERHUB_USERNAME }}
+        #     password: ${{ secrets.DOCKERHUB_PW }}
             
-        - 
-          name: Build and push
-          run: docker-compose -f "docker-compose-prod.yaml" push
+        # - 
+        #   name: Build and push
+        #   run: docker-compose -f "docker-compose-prod.yaml" push
           
-        - name: Stop container
-          if: always()
-          run: docker-compose -f "docker-compose-prod.yaml" down
+        # - name: Stop container
+        #   if: always()
+        #   run: docker-compose -f "docker-compose-prod.yaml" down
 
