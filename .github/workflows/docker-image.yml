@@ -10,27 +10,29 @@ jobs:
   docker:
       runs-on: ubuntu-latest
       steps:
-        - 
-          name: Checking the directory
-          run: ls -la
-        - 
-          name: Checking the directory
-          run: ls -la ../
-        - 
-          name: Checking the inside the directory
-          run: ls -la ../ahjin-api
+        - name: Checkout
+          uses: actions/checkout@v1
+          
         -
           name: Build the Docker image
-          run: docker-compose -f docker-compose-prod.yaml build
+          run: docker-compose -f "docker-compose-prod.yaml" build
+          
         -
           name: Perform some test and linting
           run: echo "PERFORMING SOME TEST AND CHECKING LINTING"
+          
         -  
           name: Login to DockerHub
           uses: docker/login-action@v2
           with:
             username: ${{ secrets.DOCKERHUB_USERNAME }}
             password: ${{ secrets.DOCKERHUB_PW }}
+            
         - 
           name: Build and push
-          run: docker-compose -f docker-compose-prod.yaml push
+          run: docker-compose -f "docker-compose-prod.yaml" push
+          
+        - name: Stop container
+          if: always()
+          run: docker-compose -f "docker-compose-prod.yaml" down
+
