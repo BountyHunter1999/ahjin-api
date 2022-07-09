@@ -21,27 +21,25 @@ jobs:
           run: ls -la ../ahjin-api/../ahjin-api
 
         - name: Make envfile
-          uses: SpicyPizza/create-envfile@v1.3
-          with:
-            envkey_KHALTI_SECRET_KEY: ${{ secrets.KHALTI_SECRET_KEY }}
-            envkey_POSTGRES_HOST: db
-            envkey_POSTGRES_NAME: app
-            envkey_POSTGRES_USER: postgres
-            envkey_POSTGRES_PASSWORD: ${{ secrets.POSTGRES_PASSWORD }}
-            envkey_DJANGO_ALLOWED_HOSTS: localhost 127.0.0.1 0.0.0.0 [::1]
-            envkey_GMAIL_PW: ${{ secrets.GMAIL_PW }}
-            envkey_GMAIL_ACC: ${{ secrets.GMAIL_ACC }}
-            envkey_EMAIL_USE_TLS: True
-            envkey_EMAIL_HOST: smtp.gmail.com
-            envkey_FRONT_END_URL: http://localhost:3000
-            envkey_EMAIL_BACKEND: django.core.mail.backends.smtp.EmailBackend
-            envkey_EMAIL_VERIFICATION_OPTION: mandatory
+          run: | 
+            touch ${{ github.workspace }}/.env
+            echo KHALTI_SECRET_KEY= ${{ secrets.KHALTI_SECRET_KEY }} >> ${{ github.workspace }}/.env
+            echo POSTGRES_HOST= db >> ${{ github.workspace }}/.env
+            echo POSTGRES_NAME= app >> ${{ github.workspace }}/.env
+            echo POSTGRES_USER= postgres >> ${{ github.workspace }}/.env
+            echo POSTGRES_PASSWORD= ${{ secrets.POSTGRES_PASSWORD }} >> ${{ github.workspace }}/.env
+            echo DJANGO_ALLOWED_HOSTS= localhost 127.0.0.1 0.0.0.0 [::1] >> ${{ github.workspace }}/.env
+            echo GMAIL_PW= ${{ secrets.GMAIL_PW }} >> ${{ github.workspace }}/.env
+            echo GMAIL_ACC= ${{ secrets.GMAIL_ACC }} >> ${{ github.workspace }}/.env
+            echo EMAIL_USE_TLS= True >> ${{ github.workspace }}/.env
+            echo EMAIL_HOST= smtp.gmail.com >> ${{ github.workspace }}/.env
+            echo FRONT_END_URL= http://localhost:3000 >> ${{ github.workspace }}/.env
+            echo EMAIL_BACKEND= django.core.mail.backends.smtp.EmailBackend >> ${{ github.workspace }}/.env
+            echo EMAIL_VERIFICATION_OPTION= mandatory >> ${{ github.workspace }}/.env
+            ls ${{ github.workspace }}
+          shell: bash
             
-            
-            directory: ../
-            file_name: .env
-            fail_on_empty: false
-            
+
         - name: Checkout
           uses: actions/checkout@v1
           
