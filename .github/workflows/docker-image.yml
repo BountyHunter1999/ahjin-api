@@ -13,7 +13,7 @@ jobs:
       steps:
         - name: Make envfile
           run: |
-            touch .env
+            touch /home/runner/work/ahjin-api/ahjin-api/.env
             echo KHALTI_SECRET_KEY= ${{ secrets.KHALTI_SECRET_KEY }} >> .env
             echo POSTGRES_HOST= db >> .env
             echo POSTGRES_NAME= app >> .env
