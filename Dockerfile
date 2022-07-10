@@ -39,4 +39,4 @@ USER user
 
 EXPOSE 8000
 
-CMD ["gunicorn", "--bind", ":8000", "--workers", "3", "app.wsgi:application"]
+# CMD ["gunicorn", "--bind", ":8000", "--workers", "3", "app.wsgi:application"]

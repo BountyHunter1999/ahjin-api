@@ -30,10 +30,11 @@ my_env = os.environ
 
 # SECURITY WARNING: keep the secret key used in production secret!
 
-SECRET_KEY = os.getenv("SECRET_KEY",
-        get_random_secret_key()
-        )
-# SECRET_KEY = my_env['DJANGO_SECRET_KEY']
+# SECRET_KEY = os.getenv("SECRET_KEY",
+#         get_random_secret_key()
+        # )
+
+SECRET_KEY = my_env['DJANGO_SECRET_KEY']
 # SECURITY WARNING: don't run with debug turned on in production!
 
 DEBUG = os.getenv('DJANGO_DEBUG', "False") == "True"
@@ -159,7 +160,7 @@ USE_TZ = True
 STATIC_URL = '/static/'
 STATIC_ROOT = os.path.join(BASE_DIR, 'static')
 # STATIC_ROOT = '/static/'
-print("STATIC ROOT IS", STATIC_ROOT)
+# print("STATIC ROOT IS", STATIC_ROOT)
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.0/ref/settings/#default-auto-field
