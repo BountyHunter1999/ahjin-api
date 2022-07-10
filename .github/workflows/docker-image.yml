@@ -26,22 +26,22 @@ jobs:
 
       - name: Make envfile
         run: |
-          touch ${{ github.workspace }}/.env
-          echo KHALTI_SECRET_KEY= ${{ secrets.KHALTI_SECRET_KEY }} >> ${{ github.workspace }}/.env
-          echo POSTGRES_HOST= db >> ${{ github.workspace }}/.env
-          echo POSTGRES_NAME= app >> ${{ github.workspace }}/.env
-          echo POSTGRES_USER= postgres >> ${{ github.workspace }}/.env
-          echo POSTGRES_PASSWORD= ${{ secrets.POSTGRES_PASSWORD }} >> ${{ github.workspace }}/.env
-          echo DJANGO_ALLOWED_HOSTS= localhost 127.0.0.1 0.0.0.0 [::1] >> ${{ github.workspace }}/.env
-          echo GMAIL_PW= ${{ secrets.GMAIL_PW }} >> ${{ github.workspace }}/.env
-          echo GMAIL_ACC= ${{ secrets.GMAIL_ACC }} >> ${{ github.workspace }}/.env
-          echo EMAIL_USE_TLS= True >> ${{ github.workspace }}/.env
-          echo EMAIL_HOST= smtp.gmail.com >> ${{ github.workspace }}/.env
-          echo FRONT_END_URL= http://localhost:3000 >> ${{ github.workspace }}/.env
-          echo EMAIL_BACKEND= django.core.mail.backends.smtp.EmailBackend >> ${{ github.workspace }}/.env
-          echo EMAIL_VERIFICATION_OPTION= mandatory >> ${{ github.workspace }}/.env
+          touch ${{ github.workspace }}/.env-prod
+          echo KHALTI_SECRET_KEY= ${{ secrets.KHALTI_SECRET_KEY }} >> ${{ github.workspace }}/.env-prod
+          echo POSTGRES_HOST= db >> ${{ github.workspace }}/.env-prod
+          echo POSTGRES_NAME= app >> ${{ github.workspace }}/.env-prod
+          echo POSTGRES_USER= postgres >> ${{ github.workspace }}/.env-prod
+          echo POSTGRES_PASSWORD= ${{ secrets.POSTGRES_PASSWORD }} >> ${{ github.workspace }}/.env-prod
+          echo DJANGO_ALLOWED_HOSTS= localhost 127.0.0.1 0.0.0.0 [::1] >> ${{ github.workspace }}/.env-prod
+          echo GMAIL_PW= ${{ secrets.GMAIL_PW }} >> ${{ github.workspace }}/.env-prod
+          echo GMAIL_ACC= ${{ secrets.GMAIL_ACC }} >> ${{ github.workspace }}/.env-prod
+          echo EMAIL_USE_TLS= True >> ${{ github.workspace }}/.env-prod
+          echo EMAIL_HOST= smtp.gmail.com >> ${{ github.workspace }}/.env-prod
+          echo FRONT_END_URL= http://localhost:3000 >> ${{ github.workspace }}/.env-prod
+          echo EMAIL_BACKEND= django.core.mail.backends.smtp.EmailBackend >> ${{ github.workspace }}/.env-prod
+          echo EMAIL_VERIFICATION_OPTION= mandatory >> ${{ github.workspace }}/.env-prod
           ls ${{ github.workspace }}/
-          cat ${{ github.workspace }}/.env
+          cat ${{ github.workspace }}/.env-prod
         shell: bash
 
 

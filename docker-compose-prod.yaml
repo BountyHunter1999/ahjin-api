@@ -2,7 +2,8 @@ version: "3.5"
 
 services:
   app:
-    container_name: app_k8s
+    container_name: app_prod
+    restart: always
     image: mikeyy19xx/my_app_proj1:latest 
     build:
       context: .
@@ -15,19 +16,19 @@ services:
              python manage.py migrate &&
              gunicorn app.wsgi:application --workers 3  --bind 0.0.0.0:8000"
     env_file:
-      - .env
+      - .env-prod
     depends_on:
-      - db
+      - db_prod
     networks:
       ahjin_network_prod:
         aliases:
           - app-backend
 
-  db:
+  db_prod:
     image: postgres:10-alpine
     restart: always
     env_file:
-      - .env
+      - .env-prod
     volumes:
       - db_prod:/var/lib/postgresql/data
 
@@ -40,7 +41,7 @@ services:
     build: ./app/nginx
     image: mikeyy19xx/my_nginx_proj1:latest
     restart: always
-    container_name: nginx_k8s
+    container_name: nginx_prod
     volumes:
       - static_volume:/home/app/web/staticfiles
     ports:
@@ -61,6 +62,7 @@ services:
     depends_on:
       - nginx
       - app
+      - db_prod
 
 volumes:
   db_prod:
