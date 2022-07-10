@@ -19,7 +19,7 @@ services:
     depends_on:
       - db
     networks:
-      ahjin_network:
+      ahjin_network_prod:
         aliases:
           - app-backend
 
@@ -29,10 +29,10 @@ services:
     env_file:
       - .env
     volumes:
-      - db:/var/lib/postgresql/data
+      - db_prod:/var/lib/postgresql/data
 
     networks:
-      ahjin_network:
+      ahjin_network_prod:
         aliases:
           - pg-database
     
@@ -48,7 +48,7 @@ services:
     depends_on:
       - app
     networks:
-      ahjin_network:
+      ahjin_network_prod:
         aliases:
           - nginx
   
@@ -57,16 +57,16 @@ services:
     ports:
     - 127.0.0.1:3000:3000
     networks:
-      - ahjin_network
+      - ahjin_network_prod
     depends_on:
       - nginx
       - app
 
 volumes:
-  db:
+  db_prod:
     driver: local
   static_volume:
 
 networks:
-  ahjin_network:
-    name: ahjin_network
+  ahjin_network_prod:
+    name: ahjin_network_prod
