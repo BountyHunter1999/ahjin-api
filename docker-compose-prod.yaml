@@ -7,14 +7,16 @@ services:
     image: mikeyy19xx/my_app_proj1:latest 
     build:
       context: .
-    expose:
-      - 8000
+    ports:
+      - 8001:8000
+    # expose:
+    #   - 8001
     volumes:
       - ./app:/app
     command: >
       sh -c "python manage.py wait_for_db && 
              python manage.py migrate &&
-             gunicorn app.wsgi:application --workers 3  --bind 0.0.0.0:8000"
+             gunicorn app.wsgi:application --workers 3  --bind 0.0.0.0:8001"
     env_file:
       - .env-prod
     depends_on:

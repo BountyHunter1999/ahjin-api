@@ -180,14 +180,14 @@ ACCOUNT_EMAIL_VERIFICATION = os.getenv('EMAIL_VERIFICATION_OPTION', "mandatory")
 
 ACCOUNT_CONFIRM_EMAIL_ON_GET = True
 # LOGIN_URL = 'http://localhost:8000/api/user/login'
-LOGIN_URL = f"{os.getenv('FRONT_END_URL')}/login"
+LOGIN_URL = f"{os.getenv('FRONT_END_URL', 'http://localhost:3000')}/login"
 
 # Password change
 OLD_PASSWORD_FIELD_ENABLED = True
 LOGOUT_ON_PASSWORD_CHANGE = False
 
 # Password reset
-PASSWORD_RESET_URL = f"{os.getenv('FRONT_END_URL')}/user/change-password"
+PASSWORD_RESET_URL = f"{os.getenv('FRONT_END_URL', 'http://localhost:3000')}/user/change-password"
 
 REST_AUTH_REGISTER_SERIALIZERS = {
     'REGISTER_SERIALIZER': 'user.serializers.CustomRegisterSerializer',
@@ -199,6 +199,11 @@ REST_AUTH_SERIALIZERS = {
 
 }
 
+
+# CORS_ORIGIN_WHITELIST = [
+#     'https://localhost:3000',
+#     'https://localhost:8000',
+# ]
 
 
 AUTHENTICATION_BACKENDS = [
@@ -260,36 +265,36 @@ CORS_ORIGIN_ALLOW_ALL = True
 # CORS_ORIGIN_WHITELIST = [
 #     'http://localhost:8000',
 #     'http://localhost:3000',
-    
+# ]
 # ]
 
 # Logging Configuration
 # Logging Configuration
 
 # Clear prev config
-LOGGING_CONFIG = None
+# LOGGING_CONFIG = None
 
-# Get loglevel from env
-LOGLEVEL = os.getenv('DJANGO_LOGLEVEL', 'info').upper()
+# # Get loglevel from env
+# LOGLEVEL = os.getenv('DJANGO_LOGLEVEL', 'info').upper()
 
-logging.config.dictConfig({
-    'version': 1,
-    'disable_existing_loggers': False,
-    'formatters': {
-        'console': {
-            'format': '%(asctime)s %(levelname)s [%(name)s:%(lineno)s] %(module)s %(process)d %(thread)d %(message)s',
-        },
-    },
-    'handlers': {
-        'console': {
-            'class': 'logging.StreamHandler',
-            'formatter': 'console',
-        },
-    },
-    'loggers': {
-        '': {
-            'level': LOGLEVEL,
-            'handlers': ['console',],
-        },
-    },
-})
+# logging.config.dictConfig({
+#     'version': 1,
+#     'disable_existing_loggers': False,
+#     'formatters': {
+#         'console': {
+#             'format': '%(asctime)s %(levelname)s [%(name)s:%(lineno)s] %(module)s %(process)d %(thread)d %(message)s',
+#         },
+#     },
+#     'handlers': {
+#         'console': {
+#             'class': 'logging.StreamHandler',
+#             'formatter': 'console',
+#         },
+#     },
+#     'loggers': {
+#         '': {
+#             'level': LOGLEVEL,
+#             'handlers': ['console',],
+#         },
+#     },
+# })

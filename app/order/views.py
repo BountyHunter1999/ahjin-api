@@ -17,6 +17,8 @@ ADMIN_REQUEST = ['list', 'update', 'partial_update', 'destroy']
 
 
 from django.contrib.auth import get_user_model as User
+from products.models import Product
+from django.db import transaction
 
 
 class OrderViewSet(viewsets.ModelViewSet):
@@ -43,15 +45,32 @@ class OrderViewSet(viewsets.ModelViewSet):
         # print("I AM CREATING")
         data = request.data
 
-        print(request.user.id, "user bandai xa")
+        print(request.user.id, "user ko order bandai xa")
         data['user'] = request.user.id
-        # print(data)
-        self.check_object_permissions(request, data)
-        # serializer = OrderSerializer(data=request.data, many=True)
-        serializer = OrderSerializer(data=request.data)
-        serializer.is_valid(raise_exception=True)
-        serializer.save()
-        return Response(serializer.data, status=status.HTTP_201_CREATED)
+        print(data)
+
+
+            
+            # print(target_product.unique_feature[chosen]["quantity"])
+            # print(product)
+        with transaction.atomic():
+            # product = Product.objects.get(data)
+            self.check_object_permissions(request, data)
+            # serializer = OrderSerializer(data=request.data, many=True)
+            serializer = OrderSerializer(data=request.data)
+            serializer.is_valid(raise_exception=True)
+            serializer.save()
+            # after order place update will be triggered
+            for product in data['products']:
+                product_id = product['product']
+                decrease_count = product['quantity']
+                chosen = product['productChosen']
+                # print(product_id)
+                target_product = Product.objects.get(pk=product_id)
+                target_product.unique_feature[chosen]["count"] -= decrease_count
+                target_product.save() 
+            
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
     
     def retrieve_order(self, request, pk=None): # /api/order/<str:id>  
 
