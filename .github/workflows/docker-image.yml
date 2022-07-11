@@ -28,9 +28,9 @@ jobs:
         run: |
           touch ${{ github.workspace }}/.env-prod
           echo KHALTI_SECRET_KEY= ${{ secrets.KHALTI_SECRET_KEY }} >> ${{ github.workspace }}/.env-prod
-          echo POSTGRES_HOST= db >> ${{ github.workspace }}/.env-prod
-          echo POSTGRES_NAME= app >> ${{ github.workspace }}/.env-prod
-          echo POSTGRES_USER= postgres >> ${{ github.workspace }}/.env-prod
+          echo POSTGRES_HOST= db_prod >> ${{ github.workspace }}/.env-prod
+          echo POSTGRES_NAME= appProd >> ${{ github.workspace }}/.env-prod
+          echo POSTGRES_USER= postgresProd >> ${{ github.workspace }}/.env-prod
           echo POSTGRES_PASSWORD= ${{ secrets.POSTGRES_PASSWORD }} >> ${{ github.workspace }}/.env-prod
           echo DJANGO_ALLOWED_HOSTS= localhost 127.0.0.1 0.0.0.0 [::1] >> ${{ github.workspace }}/.env-prod
           echo GMAIL_PW= ${{ secrets.GMAIL_PW }} >> ${{ github.workspace }}/.env-prod
