@@ -20,6 +20,10 @@ class CustomUser(AbstractUser):
     user_hash = models.CharField(max_length=255, blank=True, null=True)
     is_admin = models.BooleanField(default=False, blank=True, null=True)
 
+    createdAt = models.DateTimeField(auto_now_add=True)
+    updatedAt = models.DateTimeField(auto_now=True)
+
+
     # print("Created user")
     # USERNAME_FIELD = 'email'
 
