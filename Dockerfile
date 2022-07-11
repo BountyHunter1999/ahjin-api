@@ -31,7 +31,7 @@ WORKDIR /app
 COPY ./app /app
 
 # Copy the env variables
-COPY .env .env
+# COPY .env .env docker-compose provides this
 
 # Create a user and switch to it
 RUN adduser -D user
