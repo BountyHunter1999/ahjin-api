@@ -28,7 +28,7 @@ class CustomRegisterSerializer(RegisterSerializer):
         user.user_hash = self.data.get('user_hash')
         # print("request on saving new user", request)
         user.is_admin = self.data.get('is_admin')
-        user.save()
+        user.save()  # CHANGE THIS
         # print("USER NOW, ", user)
         return user
 
