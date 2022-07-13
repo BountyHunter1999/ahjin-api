@@ -22,7 +22,7 @@ DCAT = (
     ("W","Washing Machine"),
 )
 
-DEFAULT_IMG = "https://www.google.com/imgres?imgurl=https%3A%2F%2Fpngimg.com%2Fuploads%2Fminions%2Fminions_PNG74.png&imgrefurl=https%3A%2F%2Fpngimg.com%2Fimage%2F36307&tbnid=UfhKhpbhSvDGbM&vet=12ahUKEwjm25DZg_b4AhVn_jgGHYFuBHYQMyg-egQIARB3..i&docid=EmCE6LsjyQnloM&w=1022&h=971&q=minions%20image&ved=2ahUKEwjm25DZg_b4AhVn_jgGHYFuBHYQMyg-egQIARB3"
+DEFAULT_IMG = "http://res.cloudinary.com/sankalpa-sys/image/upload/v1657722684/jw5rqwjldedhnpxjlztc.jpg"
 
 class Product(models.Model):
     name = models.CharField(max_length=255, blank=False, unique=True)
@@ -36,9 +36,9 @@ class Product(models.Model):
     
     # color = models.
     featured = models.BooleanField(default=False)
-    image = models.URLField(max_length=350, default=DEFAULT_IMG)
-    image2 = models.URLField(max_length=350, default=DEFAULT_IMG)
-    image3 = models.URLField(max_length=350, default=DEFAULT_IMG)
+    image = models.URLField(max_length=200, default=DEFAULT_IMG)
+    image2 = models.URLField(max_length=200, default=DEFAULT_IMG)
+    image3 = models.URLField(max_length=200, default=DEFAULT_IMG)
     # image = models.ImageField(null=True,blank=True, default='/placeholder.png')
     # imageII = models.ImageField(null=True,blank=True, default='/placeholder.png')
     # imageIII = models.ImageField(null=True,blank=True, default='/placeholder.png')
