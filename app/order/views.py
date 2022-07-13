@@ -53,24 +53,27 @@ class OrderViewSet(viewsets.ModelViewSet):
             
             # print(target_product.unique_feature[chosen]["quantity"])
             # print(product)
-        with transaction.atomic():
-            # product = Product.objects.get(data)
-            self.check_object_permissions(request, data)
-            # serializer = OrderSerializer(data=request.data, many=True)
-            serializer = OrderSerializer(data=request.data)
-            serializer.is_valid(raise_exception=True)
-            serializer.save()
-            # after order place update will be triggered
-            for product in data['products']:
-                product_id = product['product']
-                decrease_count = product['quantity']
-                chosen = product['productChosen']
-                # print(product_id)
-                target_product = Product.objects.get(pk=product_id)
-                target_product.unique_feature[chosen]["count"] -= decrease_count
-                target_product.save() 
-            
-            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        try:
+            with transaction.atomic():
+                # product = Product.objects.get(data)
+                self.check_object_permissions(request, data)
+                # serializer = OrderSerializer(data=request.data, many=True)
+                serializer = OrderSerializer(data=request.data)
+                serializer.is_valid(raise_exception=True)
+                serializer.save()
+                # after order place update will be triggered
+                for product in data['products']:
+                    product_id = product['product']
+                    decrease_count = product['quantity']
+                    chosen = product['productChosen']
+                    # print(product_id)
+                    target_product = Product.objects.get(pk=product_id)
+                    target_product.unique_feature[chosen]["count"] -= decrease_count
+                    target_product.save() 
+                
+                return Response(serializer.data, status=status.HTTP_201_CREATED)
+        except IndexError:
+            return Response(serializer.data, status=status.HTTP_404_NOT_FOUND)
     
     def retrieve_order(self, request, pk=None): # /api/order/<str:id>  
 
