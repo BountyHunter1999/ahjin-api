@@ -22,7 +22,7 @@ DCAT = (
     ("W","Washing Machine"),
 )
 
-DEFAULT_IMG = "https://www.canva.com/design/DAFBndmWLJ4/Wv-N9IjANw4Q8iRiHUyuBw/view?utm_content=DAFBndmWLJ4&utm_campaign=designshare&utm_medium=link&utm_source=publishsharelink"
+DEFAULT_IMG = "https://www.google.com/imgres?imgurl=https%3A%2F%2Fpngimg.com%2Fuploads%2Fminions%2Fminions_PNG74.png&imgrefurl=https%3A%2F%2Fpngimg.com%2Fimage%2F36307&tbnid=UfhKhpbhSvDGbM&vet=12ahUKEwjm25DZg_b4AhVn_jgGHYFuBHYQMyg-egQIARB3..i&docid=EmCE6LsjyQnloM&w=1022&h=971&q=minions%20image&ved=2ahUKEwjm25DZg_b4AhVn_jgGHYFuBHYQMyg-egQIARB3"
 
 class Product(models.Model):
     name = models.CharField(max_length=255, blank=False, unique=True)
