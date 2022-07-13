@@ -32,6 +32,8 @@ class Order(models.Model):
     isRewarded = models.BooleanField(default=False)
     currentAccount = models.CharField(max_length=50, blank=True, null=True)
 
+    shippingAddress = models.CharField(max_length=100, blank=False, null=False)
+
     createdAt = models.DateTimeField(auto_now_add=True)
     updatedAt = models.DateTimeField(auto_now=True)
 

@@ -14,7 +14,7 @@ class OrderSerializer(serializers.ModelSerializer):
                     "paymentMethod", "products",
                    "delivered", "total", "createdAt",
                    "updatedAt", "username", "email",
-                   "isRewarded", "currentAccount"]
+                   "isRewarded", "currentAccount", "shippingAddress"]
         read_only_field = ['id', 'user', 'delivered', 'total']
         
         
