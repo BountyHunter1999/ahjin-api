@@ -36,9 +36,9 @@ class Product(models.Model):
     
     # color = models.
     featured = models.BooleanField(default=False)
-    image = models.URLField(max_length=200, default=DEFAULT_IMG)
-    image2 = models.URLField(max_length=200, default=DEFAULT_IMG)
-    image3 = models.URLField(max_length=200, default=DEFAULT_IMG)
+    image = models.URLField(max_length=350, default=DEFAULT_IMG)
+    image2 = models.URLField(max_length=350, default=DEFAULT_IMG)
+    image3 = models.URLField(max_length=350, default=DEFAULT_IMG)
     # image = models.ImageField(null=True,blank=True, default='/placeholder.png')
     # imageII = models.ImageField(null=True,blank=True, default='/placeholder.png')
     # imageIII = models.ImageField(null=True,blank=True, default='/placeholder.png')
